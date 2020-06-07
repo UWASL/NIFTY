@@ -3,7 +3,7 @@ Hermes
 Setup
 -------
 
-In order to use Hermes, you need to have OVS installed already, with a bridge called br0. To do that, you can use the following commands (make sure to replace $INTERFACE_NAME and $IP_ADDRESS with their actual vales):
+In order to use Hermes, you need to have OVS installed already, with a bridge called br0. To do that, you can use the following commands (make sure to replace **$INTERFACE_NAME** and **$IP_ADDRESS** with their actual vales):
 
 ```bash
 	sudo apt-get update  
@@ -20,4 +20,12 @@ After that, you can just use
 make
 ```
 to compile the code and generate the excutables.
+
+
+Usage
+-------
+
+### Hermes
+
+### Partitioner
 
