@@ -1,3 +1,7 @@
+/**
+*
+*/
+
 #include <sys/types.h> 
 #include <sys/socket.h> 
 #include <arpa/inet.h> 
@@ -117,16 +121,15 @@ void DV::checkTimeOuts()
 			continue;
 
 		//Check if this node had timed out!
-	    time_t curr_time = time (NULL);
+		time_t curr_time = time (NULL);
 
-	    if(curr_time - nodes_times[destination_ips[i]] > timout_period)
-	    	nodeTimedOut(destination_ips[i]);	
+		if(curr_time - nodes_times[destination_ips[i]] > timout_period)
+			nodeTimedOut(destination_ips[i]);	
 	}
 }
 
 void DV::pingOthers(bool onlyOnce)
 {
-
 	struct sockaddr_in dest_addr;
 	dest_addr.sin_family = AF_INET;
 	dest_addr.sin_port = htons(PORT);
@@ -144,11 +147,9 @@ void DV::pingOthers(bool onlyOnce)
 				continue;
 
 			string message = to_string(destination_ips[i]);
-
 			print("Sending {"+destination_ips[i]+"} message : " + message);
 
 			const char* destination = destination_ips[i].c_str();
-
 			inet_pton(AF_INET, destination, &dest_addr.sin_addr);
 
 			if(dest_sockfd = socket(AF_INET, SOCK_DGRAM, 0) <0 )
@@ -159,10 +160,8 @@ void DV::pingOthers(bool onlyOnce)
 			    sizeof(dest_addr)); 
 			close(dest_sockfd); 
 		}
-	    std::this_thread::sleep_for(std::chrono::seconds(pinging_period));
-
+	    	std::this_thread::sleep_for(std::chrono::seconds(pinging_period));
 	}while(!onlyOnce);
-
 }
 
 bool DV::updateDV(const char* message, const char* sourceIP)
@@ -175,7 +174,7 @@ bool DV::updateDV(const char* message, const char* sourceIP)
 	timed_out_nodes[sourceIP] = false; //I now know that this node didn't time out
 
 	//update when I last heared from this node.
-    time_t curr_time = time (NULL);
+    time_t curr_time = time (NULL); // TODO indentiation
     nodes_times[sourceIP] = curr_time;
 
 	int sourceID = ip_id[sourceIP];
@@ -190,7 +189,6 @@ bool DV::updateDV(const char* message, const char* sourceIP)
 		if (cost <=2) //Can directly reach
 			reach_count++;
 		int id = ip_id[ip];
-
 
 		if (cost < myDV[id].cost) //The new cost is better, need to update my DV.
 		{
@@ -254,7 +252,7 @@ void DV::receiveMessages()
 	    buffer[n] = '\0'; 
 
 
-		inet_ntop(AF_INET, &(cliaddr.sin_addr), adder_buffer, 20);
+		inet_ntop(AF_INET, &(cliaddr.sin_addr), adder_buffer, 20); //TODO indentation
 		string address = adder_buffer;
 		string msg = buffer;
 	    print("Received a message from: " + address);
@@ -326,15 +324,12 @@ const void DV::updateOF()
 		//Modify packets going out of me.
 		rule = "ovs-ofctl add-flow br0 cookie=2,priority=500,ip,nw_dst="+dest_ip+",action=mod_dl_dst:"+through_mac+",mod_dl_src:"+my_mac+",1";
 		installRule(rule);
-
 	}
-
 
 	if(reach_count>=destinations_count) // Can reach everyone directly
 		nodes_bridge[my_ip] = true;
 	else
 		nodes_bridge[my_ip] = false;
-
 
 	updating = false;
 }
