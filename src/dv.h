@@ -176,7 +176,4 @@ public:
 	* Destructor. Deletes the underlying data structures (distance vector)
 	*/
 	~DV();
-
-
-
 };
