@@ -4,13 +4,17 @@
 #include <unordered_map>
 #include <vector>
 
-// #include <bits/stdc++.h>
-
 using namespace std;
 const double MAX_COST = 1001; //Anything with a cost more than 1000 is unreachable
 #define PORT     8080 
 #define BUFFSIZE 1024 
-
+/**
+ * DV_entry is the struct that contains infromation about each entry in the distance-vector table (DV). 
+ * The struct contains three information: 
+ * @targetIP: the targetIP this entry concerns.
+ * @throughID: the ID of the node traffic should be forwarded to next in order to reach to the final distination (@targetIP).
+ * @cost: the cost (number of hops) of reaching the target. 
+ */
 struct DV_entry
 {
 	double cost;
@@ -26,6 +30,11 @@ struct DV_entry
 		targetIP = _targetIP;
 	}
 
+	/**
+	 * These two functions return a string representing the entry.
+	 * The second function is used in cases where the targetIP is not reachable (@_throughID is -1 in that case.)
+	 */
+
 	std::string to_string() const
 	{
 		stringstream ss;
@@ -33,11 +42,10 @@ struct DV_entry
 		return ss.str();
 	}
 
-	//Returns the cost if throughtID != _throughID, returns Max_cost otherwise
 	std::string to_string(int _throughID) const
 	{
 		int temp_cost = cost;
-		if(_throughID== throughID)
+		if(_throughID == throughID)
 			temp_cost = MAX_COST;
 
 		stringstream ss;
@@ -47,46 +55,107 @@ struct DV_entry
 };
 
 
-
+/**
+ * DV is the main class, and it contains information about the distance vector table (DV_entry*), and other
+ * information that is needed.
+ */
 class DV
 {
 	unsigned int destinations_count;
 	unsigned int pinging_period;
 	unsigned int timout_period = 30;
+	bool verbose;
 	std::string *destination_ips;
 	std::string *destination_macs;
 	DV_entry* myDV;
-	std::string my_ip = "192.168.1.3"; //TODO: Probably could automate.
-	std::string my_mac = "f8:59:71:92:ab:a3"; //TODO: Probably could automate.
+	std::string my_ip = "";
+	std::string my_mac = "";
 	unordered_map<std::string, int> ip_id; //get the id for a specific ip.
 	unordered_map<std::string, time_t> nodes_times; //When was the last message received by this node
-	unordered_map<std::string, bool> timed_out_nodes;
-	unordered_map<std::string, bool> nodes_bridge //Tells whether a node is a bridge node or not.
-	string to_string(string targetIP = "");
-
+	unordered_map<std::string, bool> timed_out_nodes; //States whether a node had timed out or not.
+	unordered_map<std::string, bool> nodes_bridge; //Tells whether a node is a bridge node or not.
 	bool updating = false;
 
-	bool createPNP = false;
+	/**
+	 * Construct a message to send to other nodes. The message contains details about my current distance vector table.
+	 *
+	 * @targetIP: The IP address of the node I'm sending the message to.
+	 */
+	string to_string(string targetIP = "");
 
+
+	/// Initializes the underlying data structures. Sets the cost of reaching others to inf and reaching myself is 0.
 	void init();
+
+
+	/**
+	 * A helper function to print messages to the console. Needed as verbose might be off, and in that case we shouldn't print
+	 *
+	 * @msg: The message to be printed.
+	 * @forcePrint: defaults to false. Whether or not this print should be forced regardless of verbose settings.
+	 */
+	void print(string msg, bool forcePrint=false);
+
+
+	/**
+	 * Pings other nodes and piggyback my distance vector to the ping message.
+	 *
+	 * @onlyOnce: If set to true send only one heartbeat. Otherwise, keep sending heartbeats every pinging_period.
+	 */
 	void pingOthers(bool onlyOnce = false);
+
+
+	/// Potentially update the unerlying distance vector table using a @message received from @sourceIP.
 	bool updateDV(const char* message, const char* sourceIP);
+
+
+	/// A method to keep receiving messages from other hosts.
 	void receiveMessages();
+
+
+	/// Update the rules in the OVS's OpenFlow table using the data in the distance vector table.
 	void const updateOF();
+
+	/**
+	 * Sets a node as a timoued out one and potentially modify other entries in the DV table if they were using
+	 * the node with IP address @ip as an intermediary node.
+	 *
+	 * @ip: The IP address of the node that got timed out.
+	 */
 	void nodeTimedOut(string ip);
+
+
+	/// A helper function that calls the underlying system funciton to install a new OVS OpenFlow rule.
 	void const installRule(string rule);
-	void const createMACPNP(const vector<int>, const vector<int>);
+
+
+	/// Checks if any of the nodes I'm connected to had recently timed out.
 	void checkTimeOuts();
+
+
+	/// Returns a list of the bridge nodes in the system.
 	vector<string> getBridgeNodes();
-	// vector<string> getBridgeNodes();
+
+
 	std::thread pingingThread;
 	std::thread receivingThread;
 public:
+	/**
+	 * Constructor
+	 * 
+	 * @_my_ip: IP address of this node.
+	 * @_my_mac: MAC address of this node.
+	 * @_pinging_period: Ping other nodes every @_pinging_period number of seconds.
+	 * @_destinations_count: Number of other nodes in the system.
+	 * @_destination_ips: IP addresses of other nodes in the system.
+	 * @_destination_macs: MAC addresses of other nodes in the system.
+	 */
 	DV(std::string _my_ip, std::string _my_mac, unsigned int _pinging_period, unsigned int _destinations_count,
-	 std::string* _destination_ips, std::string* _destination_macs, bool _createPNP = false);
-	bool done(); // only returns true when both threads are done working (probably never happens??)
+	 std::string* _destination_ips, std::string* _destination_macs, bool _verbose = false);
+	bool done();
 	void printDV();
-
+    
+    /// Destructor. Deletes the underlying data structures (distance vector)
 	~DV();
 
 
