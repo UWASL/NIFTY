@@ -52,3 +52,22 @@ Where [ip] and [mac] are the node's IP and MAC addresses, and [conf] is the conf
 
 ### Partitioner
 
+To use Partitioner, you need a config file that contains the MAC addresses of nodes in each side of the partition. The structure of the config file is as follows:
+
+First line is an integer that represents the number of nodes in the first group (n).
+The next n lines list the MAC addresses of these nodes.
+Next line is an integer the represents the number of nodes in the second group (m).
+The next m lines list the MAC addresees of these nodes.
+e.g.,
+```
+1
+MAC1
+2
+MAC2
+MAC3
+```
+Finally, run Partitioner in all affected nodes as follows:
+```bash
+$ ./partitioner [mac] [conf]
+```
+Where [mac] is this node's MAC address and [conf] is the config file (default is parts.conf). If partitioner is called with no arguments at all, it heals the current partition.
