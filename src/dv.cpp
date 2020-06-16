@@ -75,7 +75,6 @@ DV::DV(std::string _my_ip, std::string _my_mac, unsigned int _pinging_period, un
 	//A seperate thread to ping others.
 	pingingThread = std::thread (&DV::pingOthers,this, false);
 	receiveMessages();
-
 }
 
 DV::~DV()
@@ -241,7 +240,6 @@ void DV::receiveMessages()
         exit(EXIT_FAILURE); 
     } 
     
-
     //Keep listening for others messages.
     while(true)
     {
