@@ -1,3 +1,7 @@
+/**
+* One line summary of what this file does
+*/
+
 #include <string>
 #include <sstream>
 #include <thread>
@@ -6,8 +10,9 @@
 
 using namespace std;
 const double MAX_COST = 1001; //Anything with a cost more than 1000 is unreachable
-#define PORT     8080 
-#define BUFFSIZE 1024 
+#define PORT     8080 	/* TODO: what is this*/
+#define BUFFSIZE 1024 	/* TODO: WHat is this*/
+
 /**
  * DV_entry is the struct that contains infromation about each entry in the distance-vector table (DV). 
  * The struct contains three information: 
@@ -15,11 +20,11 @@ const double MAX_COST = 1001; //Anything with a cost more than 1000 is unreachab
  * @throughID: the ID of the node traffic should be forwarded to next in order to reach to the final distination (@targetIP).
  * @cost: the cost (number of hops) of reaching the target. 
  */
-struct DV_entry
+struct DV_entry  // TODO: please change the name
 {
-	double cost;
-	int throughID;
-	std::string targetIP;
+	double cost;		// TODO: 
+	int throughID;		// TODO
+	std::string targetIP;	// TODO
 
 	DV_entry(): DV_entry(MAX_COST, -1,"") {}
 	DV_entry(double _cost, int _throughID): DV_entry(_cost,_throughID,"") {}
@@ -42,6 +47,9 @@ struct DV_entry
 		return ss.str();
 	}
 
+	/**
+	* TODO
+	*/
 	std::string to_string(int _throughID) const
 	{
 		int temp_cost = cost;
@@ -59,14 +67,15 @@ struct DV_entry
  * DV is the main class, and it contains information about the distance vector table (DV_entry*), and other
  * information that is needed.
  */
-class DV
+class DV  // TODO: can we please change the name ot something meaningfully. 
 {
-	unsigned int destinations_count;
-	unsigned int pinging_period;
-	unsigned int timout_period = 30;
-	bool verbose;
-	std::string *destination_ips;
-	std::string *destination_macs;
+	unsigned int destinations_count;	// TODO
+	unsigned int pinging_period;		// TODO
+	unsigned int timout_period = 30;	// TODO
+	bool verbose;				// TODO
+	std::string *destination_ips;		// TODO
+	std::string *destination_macs;		// TODO
+	
 	DV_entry* myDV;
 	std::string my_ip = "";
 	std::string my_mac = "";
@@ -152,10 +161,20 @@ public:
 	 */
 	DV(std::string _my_ip, std::string _my_mac, unsigned int _pinging_period, unsigned int _destinations_count,
 	 std::string* _destination_ips, std::string* _destination_macs, bool _verbose = false);
+	
+	/**
+	* TODO
+	*/
 	bool done();
+	
+	/**
+	* TODO
+	*/
 	void printDV();
     
-    /// Destructor. Deletes the underlying data structures (distance vector)
+	/**
+	* Destructor. Deletes the underlying data structures (distance vector)
+	*/
 	~DV();
 
 
