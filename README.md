@@ -27,11 +27,11 @@ to compile the code and generate the excutables.
 
 Usage
 -------
-There are two main excutables. Herems and Partitioner. Hermes is the fault tolerance layer that protects against partial network partitions, whereas Partitioner is a simple tool that can be used to invoke partial partitions (for testing purposes). Both of these requre OCS and assume the bridge is called br0 (see setup above).
+There are two main excutables. Herems and Partitioner. Hermes is the fault tolerance layer that protects against partial network partitions, whereas Partitioner is a simple tool that can be used to inject partial partitions (for testing purposes). Both of these requre OVS and assume the bridge is called br0 (see setup above).
 
 ### Hermes
 
-In order for Hermes to run properly, you will need to fill the config file nodes.conf. This file should contain the IP and MAC addresses of all the nodes in the cluster that are to run Hermes. It's structured as follows:
+In order for Hermes to run properly, you will need to fill the config file nodes.conf. This file should contain the IP and MAC addresses of all the nodes in the cluster. It's structured as follows:
 
 First line of the file is a single integer representing the number of nodes in the system (n). 
 The next n lines list the IP Addresses of all the nodes.
