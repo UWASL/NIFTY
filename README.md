@@ -1,5 +1,8 @@
 Hermes
 =======
+
+TODO: We need a short paragprah to define Hermes.
+
 Setup
 -------
 
