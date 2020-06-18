@@ -22,9 +22,9 @@ const double MAX_COST = 1001; //Anything with a cost more than 1000 is unreachab
  */
 struct DV_entry  // TODO: please change the name
 {
-	double cost;		// TODO: 
+	double cost;		// The cost to reach the node (number of hops) 
 	int throughID;		// TODO
-	std::string targetIP;	// TODO
+	std::string targetIP;	// The IP of the node
 
 	DV_entry(): DV_entry(MAX_COST, -1,"") {}
 	DV_entry(double _cost, int _throughID): DV_entry(_cost,_throughID,"") {}
@@ -48,7 +48,8 @@ struct DV_entry  // TODO: please change the name
 	}
 
 	/**
-	* TODO
+	* turn entry to string for printing
+	* returns the cost to reach the node (or inf) and its IP
 	*/
 	std::string to_string(int _throughID) const
 	{
@@ -69,12 +70,12 @@ struct DV_entry  // TODO: please change the name
  */
 class DV  // TODO: can we please change the name ot something meaningfully. 
 {
-	unsigned int destinations_count;	// TODO
-	unsigned int pinging_period;		// TODO
-	unsigned int timout_period = 30;	// TODO
-	bool verbose;				// TODO
-	std::string *destination_ips;		// TODO
-	std::string *destination_macs;		// TODO
+	unsigned int destinations_count;	// number of nodes in the system (-1)
+	unsigned int pinging_period;		// the period for heartbeat messages to check reachability
+	unsigned int timout_period = 30;	// the timeout period: nodes is considered unreachable after that time
+	bool verbose;				// verbose mode, more output, good for debugging
+	std::string *destination_ips;		// list of ips of the other nodes in the system
+	std::string *destination_macs;		// list of macs of the other nodes in the system
 	
 	DV_entry* myDV;
 	std::string my_ip = "";
@@ -163,12 +164,12 @@ public:
 	 std::string* _destination_ips, std::string* _destination_macs, bool _verbose = false);
 	
 	/**
-	* TODO
+	* TODO, BASIL: maybe remove this function?
 	*/
 	bool done();
 	
 	/**
-	* TODO
+	* function to output the entire distance-vector table
 	*/
 	void printDV();
     
