@@ -1,5 +1,6 @@
 /**
-* TODO
+* The partitioner.cpp code is used to help test Hermes
+* by introducing artificial partitions between the nodes
 */
 
 #include <bits/stdc++.h>
@@ -9,7 +10,9 @@ using namespace std;
 string MY_MAC = "";
 
 /**
-* TODO
+* A helper function that calls the underlying system funciton to install a new OVS OpenFlow rule.
+* 
+* @rule: a string with a command to install an OVS rule
 */
 void installRule(string rule)
 {
@@ -18,7 +21,8 @@ void installRule(string rule)
 }
 
 /**
-* TODO
+* A function to output a help message to the user of the code
+* showing how to run the code and what parameters to give it 
 */
 void print_usage()
 {
