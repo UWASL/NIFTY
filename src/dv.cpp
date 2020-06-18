@@ -1,5 +1,6 @@
 /**
-* TODO
+* Implementation file for the primary functions class DV
+* and the entries class DV_enrty
 */
 
 #include <sys/types.h> 
@@ -173,8 +174,8 @@ bool DV::updateDV(const char* message, const char* sourceIP)
 	timed_out_nodes[sourceIP] = false; //I now know that this node didn't time out
 
 	//update when I last heared from this node.
-    time_t curr_time = time (NULL); // TODO indentiation
-    nodes_times[sourceIP] = curr_time;
+    	time_t curr_time = time (NULL);
+    	nodes_times[sourceIP] = curr_time;
 
 	int sourceID = ip_id[sourceIP];
 
@@ -250,9 +251,9 @@ void DV::receiveMessages()
 	    buffer[n] = '\0'; 
 
 
-		inet_ntop(AF_INET, &(cliaddr.sin_addr), adder_buffer, 20); //TODO indentation
-		string address = adder_buffer;
-		string msg = buffer;
+	    inet_ntop(AF_INET, &(cliaddr.sin_addr), adder_buffer, 20);
+	    string address = adder_buffer;
+	    string msg = buffer;
 	    print("Received a message from: " + address);
 	    print("The message: " +  msg); 
 
