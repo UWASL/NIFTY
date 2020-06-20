@@ -48,11 +48,11 @@ void createMACPNP(const vector<string> g1, const vector<string> g2)
 {
 	if(find(g1.begin(), g1.end(), MY_MAC)!=g1.end()) {// I'm in g1, shouldn't reach any g2 members
 		for (int i = 0; i < g2.size(); ++i)
-			installRule("sudo ovs-ofctl add-flow br0 cookie=10,priority=10000,dl_src="+g2[i]+",action=drop"); //TODO remove sudo as we discussed
+			installRule("ovs-ofctl add-flow br0 cookie=10,priority=10000,dl_src="+g2[i]+",action=drop");
 	}
 	else if(find(g2.begin(), g2.end(), MY_MAC)!=g2.end()) {
 		for (int i = 0; i < g1.size(); ++i)
-			installRule("sudo ovs-ofctl add-flow br0 cookie=10,priority=10000,dl_src="+g1[i]+",action=drop");
+			installRule("ovs-ofctl add-flow br0 cookie=10,priority=10000,dl_src="+g1[i]+",action=drop");
 	}
 	//Do nothing otherwise (I'm part of g3)
 }
@@ -70,7 +70,7 @@ int main(int argc, char** argv)
 			fin.open("./parts.conf");
 		else if (argc == 1)
 		{
-			installRule("sudo ovs-ofctl del-flows br0 cookie=10/-1");
+			installRule("ovs-ofctl del-flows br0 cookie=10/-1");
 			exit(0);
 		}
 		else print_usage();
