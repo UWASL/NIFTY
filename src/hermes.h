@@ -182,6 +182,11 @@ public:
 	 */
 	Hermes(std::string _myIp, std::string _myMac, unsigned int _pingingPeriod, unsigned int _destinationsCount,
 	       std::string* _destinationIps, std::string* _destinationMacs, bool _verbose = false);
+
+	/**
+	 * Starts the Hermes process. Start receiving messages and pinging others.
+	 */
+	void start();
 	
 	/**
 	* function to output the entire distance-vector table

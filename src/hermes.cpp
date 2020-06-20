@@ -73,14 +73,13 @@ Hermes::Hermes(std::string _myIp, std::string _myMac, unsigned int _pingingPerio
 
 	distanceVector = new DistanceVectorEntry[destinationsCount];
 	init();
-	
+}
+void Hermes::start()
+{
 	//A seperate thread to ping others.
-	// TODO move the steps that bootstrap Hermes to a seperate function.
-	// Maybe call it 
 	pingingThread = std::thread (&Hermes::pingOthers, this, false);
 	receiveMessages();
 }
-
 
 Hermes::~Hermes()
 {
