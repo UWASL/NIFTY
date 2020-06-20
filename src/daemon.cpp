@@ -28,7 +28,7 @@ void printUsage()
  * Prints the args that are passed to the driver.
  */
 void printArgs(string myIp, string myMac, int pingingPeriod, int destinationsCount,
- const string* destinationIps, const string* destinationMacs, bool verbose)
+ 	       const string* destinationIps, const string* destinationMacs, bool verbose)
 {
 	printf("myIp: %s\n", myIp.c_str());
 	printf("myMac: %s\n", myMac.c_str());
@@ -53,7 +53,6 @@ void printArgs(string myIp, string myMac, int pingingPeriod, int destinationsCou
 		temp += destinationMacs[i];
 	}
 	printf("destinationMacs: %s\n", temp.c_str());
-
 }
 
 /**
@@ -61,8 +60,8 @@ void printArgs(string myIp, string myMac, int pingingPeriod, int destinationsCou
  * 
  * Parses arguments passed to the program and creates DV with them.
  */
-int main(int argc, char** argv) { 
-
+int main(int argc, char** argv) 
+{ 
 	int destinationsCount = 1;
 	string* destinationIps;
 	string* destinationMacs;
@@ -75,6 +74,7 @@ int main(int argc, char** argv) {
 	if(argc <= 3)
 		printUsage();
 
+	// Parse the command line arguments
 	try
 	{
 		for (int i = 1; i < argc; ++i)
@@ -101,14 +101,16 @@ int main(int argc, char** argv) {
 
 		for (int j = 0; j < destinationsCount; ++j)
 		{
-			string temp;fin>>temp;
-			destinationIps[j] = temp;
+			string dstIp;
+			fin>>dstIp;
+			destinationIps[j] = dstIp;
 		}
 
 		for (int j = 0; j < destinationsCount; ++j)
 		{
-			string temp;fin>>temp;
-			destinationMacs[j] = temp;
+			string dstMac;
+			fin>>dstMac;
+			destinationMacs[j] = dstMac;
 		}
 
 		fin.close();
