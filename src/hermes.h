@@ -1,5 +1,6 @@
 /**
- * This is a header file that contains the skeleton for the main class of Hermes and the implementation of the Distance Vectory Entry class.
+ * This is a header file that contains the skeleton for the main class of Hermes 
+ * and the implementation of the Distance Vectory Entry class.
  */
 
 #include <string>
@@ -9,9 +10,10 @@
 #include <vector>
 
 using namespace std;
-const double MAX_COST = 1001; // Anything with a cost more than 1000 is unreachable
-#define PORT     8080 	// Hermes instances use this port to communicate with each other.
-#define BUFFSIZE 1024 	// Maximum size of a single message sent between Hermes instances (in bytes).
+const double MAX_COST = 1001; 	// Anything with a cost more than 1000 is unreachable
+#define PORT     8080 		// Hermes instances use this port to communicate with each other
+#define BUFFSIZE 1024 		// Maximum size of a single message sent between Hermes instances (in bytes)
+
 /**
  * DistanceVectorEntry is the struct that contains infromation about each entry in the distance-vector table (DV). 
  * The struct contains three information: 
@@ -35,10 +37,8 @@ struct DistanceVectorEntry
 	}
 
 	/**
-	 * These two functions return a string representing the entry.
-	 * The second function is used in cases where the targetIP is not reachable (@_throughID is -1 in that case.)
+	 * return a string representing the entry.
 	 */
-
 	std::string to_string() const
 	{
 		stringstream ss;
@@ -47,7 +47,8 @@ struct DistanceVectorEntry
 	}
 
 	/**
-	* turn entry to string for printing
+	* Turn entry to string for printing
+	* @_throughID \\TODO
 	* returns the cost to reach the node (or inf) and its IP
 	*/
 	std::string to_string(int _throughID) const
@@ -69,24 +70,26 @@ struct DistanceVectorEntry
  */
 class Hermes
 {
-	unsigned int destinationsCount;	// number of nodes in the system (-1)
+	unsigned int destinationsCount;		// number of nodes in the system (-1)
 	unsigned int pingingPeriod;		// the period for heartbeat messages to check reachability
 	unsigned int timeoutPeriod = 30;	// the timeout period: nodes is considered unreachable after that time
-	bool verbose;						// verbose mode, more output, good for debugging
+	bool verbose;				// verbose mode, more output, good for debugging
 	std::string *destinationIps;		// list of ips of the other nodes in the system
 	std::string *destinationMacs;		// list of macs of the other nodes in the system
 	
 	DistanceVectorEntry* distanceVector;
 	std::string myIp = "";
 	std::string myMac = "";
-	unordered_map<std::string, int> ipToId; //get the id for a specific ip.
-	unordered_map<std::string, time_t> nodesTimes; //When was the last message received by this node
+	unordered_map<std::string, int> ipToId; 	//get the id for a specific ip.
+	unordered_map<std::string, time_t> nodesTimes; 	//When was the last message received by this node
 	unordered_map<std::string, bool> timedOutNodes; //States whether a node had timed out or not.
-	unordered_map<std::string, bool> isBridgeNode; //Tells whether a node is a bridge node or not.
+	unordered_map<std::string, bool> isBridgeNode; 	//Tells whether a node is a bridge node or not.
 	bool updating = false;
 
+	
 	/**
-	 * Construct a message to send to other nodes. The message contains details about my current distance vector table.
+	 * Construct a message to send to other nodes. The message 
+	 * contains details about my current distance vector table.
 	 *
 	 * @targetIP: The IP address of the node I'm sending the message to.
 	 */
@@ -94,13 +97,15 @@ class Hermes
 
 
 	/**
-	 * Initializes the underlying data structures. Sets the cost of reaching others to inf and reaching myself is 0.
+	 * Initializes the underlying data structures. Sets the cost of 
+	 * reaching others to inf and reaching myself is 0.
 	 */
 	void init();
 
 
 	/**
-	 * A helper function to print messages to the console. Needed as verbose might be off, and in that case we shouldn't print
+	 * A helper function to print messages to the console. 
+	 * Needed as verbose might be off, and in that case we shouldn't print
 	 *
 	 * @msg: The message to be printed.
 	 * @forcePrint: defaults to false. Whether or not this print should be forced regardless of verbose settings.
@@ -133,8 +138,10 @@ class Hermes
 	*/
 	void const updateOF();
 
+	
 	/**
-	 * Sets a node as a timoued out one and potentially modify other entries in the DV table if they were using
+	 * Sets a node as a timoued out one and potentially modify 
+	 * other entries in the DV table if they were using
 	 * the node with IP address @ip as an intermediary node.
 	 *
 	 * @ip: The IP address of the node that got timed out.
@@ -152,7 +159,6 @@ class Hermes
 	* Checks if any of the nodes I'm connected to had recently timed out.
 	*/
 	void checkTimeOuts();
-
 
 	
 	/**
@@ -175,7 +181,7 @@ public:
 	 * @_destinationMacs: MAC addresses of other nodes in the system.
 	 */
 	Hermes(std::string _myIp, std::string _myMac, unsigned int _pingingPeriod, unsigned int _destinationsCount,
-	 std::string* _destinationIps, std::string* _destinationMacs, bool _verbose = false);
+	       std::string* _destinationIps, std::string* _destinationMacs, bool _verbose = false);
 	
 	/**
 	* function to output the entire distance-vector table
