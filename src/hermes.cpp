@@ -18,7 +18,7 @@
 using namespace std;
 
 
-string Hermes::to_string(string targetIP)
+string Hermes::toString(string targetIP)
 {
 	int throughID = ipToId.find(targetIP) == ipToId.end()? -1 : ipToId[targetIP];
 
@@ -27,7 +27,7 @@ string Hermes::to_string(string targetIP)
 	{
 		if(i)
 			ret += ";";
-		ret += distanceVector[i].to_string(throughID);
+		ret += distanceVector[i].toString(throughID);
 	}
 	return ret;
 }
@@ -154,7 +154,7 @@ void Hermes::pingOthers(bool onlyOnce)
 			if (myIp == destinationIps[i])
 				continue;
 
-			string message = to_string(destinationIps[i]);
+			string message = toString(destinationIps[i]);
 			print("Sending {"+destinationIps[i]+"} message : " + message);
 
 			const char* destination = destinationIps[i].c_str();
@@ -216,7 +216,7 @@ bool Hermes::updateDV(const char* message, const char* sourceIP)
 	{
 		updateOF();
 		print("DV got updated.", true);
-		print("current DV is: " + to_string());
+		print("current DV is: " + toString());
 	}
 	return updated;
 }
@@ -345,7 +345,7 @@ const void Hermes::updateOF()
 
 void Hermes::printDV()
 {
-	print("CurrentDV: " + to_string());
+	print("CurrentDV: " + toString());
 }
 
 

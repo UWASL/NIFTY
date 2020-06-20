@@ -39,7 +39,7 @@ struct DistanceVectorEntry
 	/**
 	 * return a string representing the entry.
 	 */
-	std::string to_string() const
+	std::string toString() const
 	{
 		stringstream ss;
 		ss<<cost<<" "<<targetIP;
@@ -47,14 +47,14 @@ struct DistanceVectorEntry
 	}
 
 	/**
-	* Turn entry to string for printing
-	* @_throughID \\TODO
+	* Turn entry to string for sending to other nodes (serialization)
+	* @sendTo: Id of the node this entry will be sent to. 
 	* returns the cost to reach the node (or inf) and its IP
 	*/
-	std::string to_string(int _throughID) const
+	std::string toString(int sendTo) const
 	{
 		int tempCost = cost;
-		if(_throughID == throughID)
+		if(sendTo == throughID)
 			tempCost = MAX_COST;
 
 		stringstream ss;
@@ -93,7 +93,7 @@ class Hermes
 	 *
 	 * @targetIP: The IP address of the node I'm sending the message to.
 	 */
-	string to_string(string targetIP = "");
+	string toString(string targetIP = "");
 
 
 	/**
