@@ -124,6 +124,12 @@ int main(int argc, char** argv)
 
 	Hermes hermes(myIp, myMac, pingingPeriod, destinationsCount, destinationIps, destinationMacs, verbose);
 
+	// TODO. Can you please remove this empty loop.
+	// instead create a new function in Hermes with a infinite loop.
+	// Call it start , in this new function create the checking thread and call recieveMsgs.
+	// this new function will be a blocking function since recieveMsgs is blocking
+	// instead of this while loop you will have something like
+	// hermes.start()
 	while(true)
 	{	}
 
