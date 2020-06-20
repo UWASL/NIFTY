@@ -10,7 +10,7 @@ using namespace std;
 /**
  * Prints usage information.
  */
-void print_usage()
+void printUsage()
 {
 	printf("::USAGE::\n");
 	printf("./daemon -i [ip] -m [mac] [OPTIONS]\n\n");
@@ -27,32 +27,32 @@ void print_usage()
 /**
  * Prints the args that are passed to the driver.
  */
-void print_args(string my_ip, string my_mac, int pinging_period, int destinations_count,
- const string* destination_ips, const string* destination_macs, bool verbose)
+void printArgs(string myIp, string myMac, int pingingPeriod, int destinationsCount,
+ const string* destinationIps, const string* destinationMacs, bool verbose)
 {
-	printf("my_ip: %s\n", my_ip.c_str());
-	printf("my_mac: %s\n", my_mac.c_str());
-	printf("pinging_period: %d\n", pinging_period);
+	printf("myIp: %s\n", myIp.c_str());
+	printf("myMac: %s\n", myMac.c_str());
+	printf("pingingPeriod: %d\n", pingingPeriod);
 	printf("Verbose: %s\n", verbose?"True":"False");
-	printf("destinations_count: %d\n", destinations_count);
+	printf("destinationsCount: %d\n", destinationsCount);
 
 	string temp = "";
-	for (int i = 0; i < destinations_count; ++i)
+	for (int i = 0; i < destinationsCount; ++i)
 	{
 		if(i)
 			temp += ", ";
-		temp += destination_ips[i];
+		temp += destinationIps[i];
 	}
-	printf("destination_ips: %s\n", temp.c_str());
+	printf("destinationIps: %s\n", temp.c_str());
 
 	temp = "";
-	for (int i = 0; i < destinations_count; ++i)
+	for (int i = 0; i < destinationsCount; ++i)
 	{
 		if(i)
 			temp += ", ";
-		temp += destination_macs[i];
+		temp += destinationMacs[i];
 	}
-	printf("destination_macs: %s\n", temp.c_str());
+	printf("destinationMacs: %s\n", temp.c_str());
 
 }
 
@@ -63,64 +63,64 @@ void print_args(string my_ip, string my_mac, int pinging_period, int destination
  */
 int main(int argc, char** argv) { 
 
-	int destinations_count = 1;
-	string* destination_ips;
-	string* destination_macs;
-	string my_ip = "IP"; 
-	string my_mac = "MAC"; 
-	string conf_path = "nodes.conf";
-	int pinging_period = 5;
+	int destinationsCount = 1;
+	string* destinationIps;
+	string* destinationMacs;
+	string myIp = "IP"; 
+	string myMac = "MAC"; 
+	string confPath = "nodes.conf";
+	int pingingPeriod = 5;
 	bool verbose = false;
 
 	if(argc <= 3)
-		print_usage();
+		printUsage();
 
 	try
 	{
 		for (int i = 1; i < argc; ++i)
 		{
 			if(argv[i][0]=='-' && argv[i][1] == 'i')
-				my_ip = argv[++i];
+				myIp = argv[++i];
 
 			else if(argv[i][0]=='-' && argv[i][1] == 'm')
-				my_mac = argv[++i];
+				myMac = argv[++i];
 
 			else if(argv[i][0]=='-' && argv[i][1] == 't')
-				pinging_period = stoi(argv[++i]);
+				pingingPeriod = stoi(argv[++i]);
 
 			else if(argv[i][0]=='-' && argv[i][1] == 'v')
 				verbose = true;
 
 			else if(argv[i][0]=='-' && argv[i][1] == 'c')
-				conf_path = argv[++i];
+				confPath = argv[++i];
 		}
-		ifstream fin(conf_path);
-		fin>>destinations_count;
-		destination_ips = new string[destinations_count];
-		destination_macs = new string[destinations_count];
+		ifstream fin(confPath);
+		fin>>destinationsCount;
+		destinationIps = new string[destinationsCount];
+		destinationMacs = new string[destinationsCount];
 
-		for (int j = 0; j < destinations_count; ++j)
+		for (int j = 0; j < destinationsCount; ++j)
 		{
 			string temp;fin>>temp;
-			destination_ips[j] = temp;
+			destinationIps[j] = temp;
 		}
 
-		for (int j = 0; j < destinations_count; ++j)
+		for (int j = 0; j < destinationsCount; ++j)
 		{
 			string temp;fin>>temp;
-			destination_macs[j] = temp;
+			destinationMacs[j] = temp;
 		}
 
 		fin.close();
 	}
 	catch(...)
 	{
-		print_usage();
+		printUsage();
 		exit(1);
 	}
-	print_args(my_ip, my_mac, pinging_period, destinations_count, destination_ips, destination_macs, verbose);
+	printArgs(myIp, myMac, pingingPeriod, destinationsCount, destinationIps, destinationMacs, verbose);
 
-	Hermes hermes(my_ip, my_mac, pinging_period, destinations_count, destination_ips, destination_macs, verbose);
+	Hermes hermes(myIp, myMac, pingingPeriod, destinationsCount, destinationIps, destinationMacs, verbose);
 
 	while(true)
 	{	}
