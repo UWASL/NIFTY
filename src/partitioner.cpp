@@ -78,6 +78,8 @@ int main(int argc, char** argv)
 			fin.open("./parts.conf");
 		else if (argc == 1)
 		{
+			// No command line arguments are provided
+			// heal all current partial network paritions by deleting the flow rules with a cookie=10
 			installRule("ovs-ofctl del-flows br0 cookie=10/-1");
 			exit(0);
 		}
