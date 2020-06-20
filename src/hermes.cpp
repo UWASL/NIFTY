@@ -226,7 +226,7 @@ void Hermes::receiveMessages()
     int sockfd; 
     char buffer[BUFFSIZE]; 
     struct sockaddr_in servaddr, cliaddr; 
-    char adder_buffer[20];  // TODO define the 20 as a macro
+    char adder_buffer[ADDRSIZE];
 
     // Creating socket file descriptor 
     if ( (sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0 ) { 
@@ -258,7 +258,7 @@ void Hermes::receiveMessages()
 	                     MSG_WAITALL, ( struct sockaddr *) &cliaddr, &len); 
 	    buffer[n] = '\0'; 
 
-	    inet_ntop(AF_INET, &(cliaddr.sin_addr), adder_buffer, 20);
+	    inet_ntop(AF_INET, &(cliaddr.sin_addr), adder_buffer, ADDRSIZE);
 	    string address = adder_buffer;
 	    string msg = buffer;
 	    print("Received a message from: " + address);
@@ -268,7 +268,6 @@ void Hermes::receiveMessages()
 	    updateDV(buffer, adder_buffer);
     }	
     close(sockfd);
-    assert(false);
 }
 
 

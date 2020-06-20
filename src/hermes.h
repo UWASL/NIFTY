@@ -13,6 +13,7 @@ using namespace std;
 const double MAX_COST = 1001; 	// Anything with a cost more than 1000 is unreachable
 #define PORT     8080 		// Hermes instances use this port to communicate with each other
 #define BUFFSIZE 1024 		// Maximum size of a single message sent between Hermes instances (in bytes)
+#define ADDRSIZE 20 		// Size of address in bytes. 
 
 /**
  * DistanceVectorEntry is the struct that contains infromation about each entry in the distance-vector table (DV). 
