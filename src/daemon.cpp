@@ -1,16 +1,15 @@
 /**
-* The main file of Hermes
-*/
+ * The main file of Hermes (contains driver code)
+ */
 
 #include <fstream>
-#include "dv.h"  // TODO we will need a better file name
-
+#include "hermes.h" 
 using namespace std;
 
 
 /**
-* Prints usage information.
-*/
+ * Prints usage information.
+ */
 void print_usage()
 {
 	printf("::USAGE::\n");
@@ -25,10 +24,9 @@ void print_usage()
 	exit(1);
 }
 
-/// 
 /**
-* Prints the args that are passed to the driver.
-*/
+ * Prints the args that are passed to the driver.
+ */
 void print_args(string my_ip, string my_mac, int pinging_period, int destinations_count,
  const string* destination_ips, const string* destination_macs, bool verbose)
 {
@@ -122,9 +120,9 @@ int main(int argc, char** argv) {
 	}
 	print_args(my_ip, my_mac, pinging_period, destinations_count, destination_ips, destination_macs, verbose);
 
-	DV dv(my_ip, my_mac, pinging_period, destinations_count, destination_ips, destination_macs, verbose);
+	Hermes hermes(my_ip, my_mac, pinging_period, destinations_count, destination_ips, destination_macs, verbose);
 
-	while(!dv.done())
+	while(true)
 	{	}
 
     return 0; 

@@ -1,7 +1,6 @@
 /**
-* Implementation file for the primary functions class DV
-* and the entries class DV_enrty
-*/
+ * Implementation file for the primary class Hermes
+ */
 
 #include <sys/types.h> 
 #include <sys/socket.h> 
@@ -14,35 +13,35 @@
 #include <assert.h> 
 #include <time.h>
 #include <algorithm>
-#include "dv.h"
+#include "hermes.h"
 
 
 using namespace std;
 
 
-string DV::to_string(string targetIP)
+string Hermes::to_string(string targetIP)
 {
-	int throughID = ip_id.find(targetIP) == ip_id.end()? -1 : ip_id[targetIP];
+	int throughID = ipToId.find(targetIP) == ipToId.end()? -1 : ipToId[targetIP];
 
 	std::string ret = "";
-	for (int i = 0; i < destinations_count; ++i)
+	for (int i = 0; i < destinationsCount; ++i)
 	{
 		if(i)
 			ret += ";";
-		ret += myDV[i].to_string(throughID);
+		ret += distanceVector[i].to_string(throughID);
 	}
 	return ret;
 }
 
-void DV::print(string msg, bool forcePrint)
+void Hermes::print(string msg, bool forcePrint)
 {
 	if(verbose || forcePrint)
 		printf("%s\n", msg.c_str());
 }
 
-DV_entry* DV_from_string(const char* message, int len)
+DistanceVectorEntry* distancVectorFromString(const char* message, int len)
 {
-	DV_entry* ret = new DV_entry[len];
+	DistanceVectorEntry* ret = new DistanceVectorEntry[len];
 	std::stringstream ss(message);
 	std::string token;
 	int id = 0;
@@ -53,103 +52,103 @@ DV_entry* DV_from_string(const char* message, int len)
 	    std::string ip;
 	    ss2>>cost>>ip;
 
-	    ret[id] =  DV_entry(cost, id, ip);
+	    ret[id] =  DistanceVectorEntry(cost, id, ip);
 	    id++;
 	}
 	return ret;
 }
 
 
-DV::DV(std::string _my_ip, std::string _my_mac, unsigned int _pinging_period, unsigned int _destinations_count,
- std::string* _destination_ips, std::string* _destination_macs, bool _verbose)
+Hermes::Hermes(std::string _myIp, std::string _myMac, unsigned int _pingingPeriod, unsigned int _destinationsCount,
+ std::string* _destinationIps, std::string* _destinationMacs, bool _verbose)
 {
-	my_ip = _my_ip;
-	my_mac = _my_mac;
-	pinging_period = _pinging_period;
-	destinations_count = _destinations_count;
-	destination_ips = _destination_ips;
-	destination_macs = _destination_macs;
+	myIp = _myIp;
+	myMac = _myMac;
+	pingingPeriod = _pingingPeriod;
+	destinationsCount = _destinationsCount;
+	destinationIps = _destinationIps;
+	destinationMacs = _destinationMacs;
 	verbose = _verbose;
 
-	myDV = new DV_entry[destinations_count];
+	distanceVector = new DistanceVectorEntry[destinationsCount];
 	init();
 	//A seperate thread to ping others.
-	pingingThread = std::thread (&DV::pingOthers,this, false);
+	pingingThread = std::thread (&Hermes::pingOthers,this, false);
 	receiveMessages();
 }
 
-DV::~DV()
+Hermes::~Hermes()
 {
-	delete[] myDV;
+	delete[] distanceVector;
 }
 
-void DV::init()
+void Hermes::init()
 {
-	for (int i = 0; i < destinations_count; ++i)
+	for (int i = 0; i < destinationsCount; ++i)
 	{
-		ip_id[destination_ips[i]] = i;
+		ipToId[destinationIps[i]] = i;
 
-		myDV[i] = DV_entry(MAX_COST, -1,destination_ips[i]);
-		if(destination_ips[i] == my_ip)
-			myDV[i] = DV_entry(0.0, i, my_ip); //Cost to reach myself
+		distanceVector[i] = DistanceVectorEntry(MAX_COST, -1,destinationIps[i]);
+		if(destinationIps[i] == myIp)
+			distanceVector[i] = DistanceVectorEntry(0.0, i, myIp); //Cost to reach myself
 	}
 	updateOF();
 }
 
-void DV::nodeTimedOut(string ip)
+void Hermes::nodeTimedOut(string ip)
 {
 	//I already know that I cannot reach this one, do nothing. 
-	if(timed_out_nodes.find(ip) != timed_out_nodes.end() && timed_out_nodes[ip])
+	if(timedOutNodes.find(ip) != timedOutNodes.end() && timedOutNodes[ip])
 		return;
 
 	print("Node " + ip + " had timedout!!");
-	for (int i = 0; i < destinations_count; ++i)
+	for (int i = 0; i < destinationsCount; ++i)
 	{
-		if (myDV[i].throughID>= 0 && destination_ips[myDV[i].throughID] == ip) //Used to go through this node, it's inf now!
+		if (distanceVector[i].throughID>= 0 && destinationIps[distanceVector[i].throughID] == ip) //Used to go through this node, it's inf now!
 		{
-			myDV[i].cost = MAX_COST;
-			myDV[i].throughID = -1;
+			distanceVector[i].cost = MAX_COST;
+			distanceVector[i].throughID = -1;
 		}
 	}
 }
 
-void DV::checkTimeOuts()
+void Hermes::checkTimeOuts()
 {
-	for (int i = 0; i < destinations_count; ++i)
+	for (int i = 0; i < destinationsCount; ++i)
 	{
-		if (my_ip == destination_ips[i])
+		if (myIp == destinationIps[i])
 			continue;
 
 		//Check if this node had timed out!
 		time_t curr_time = time (NULL);
 
-		if(curr_time - nodes_times[destination_ips[i]] > timout_period)
-			nodeTimedOut(destination_ips[i]);	
+		if(curr_time - nodesTimes[destinationIps[i]] > timeoutPeriod)
+			nodeTimedOut(destinationIps[i]);	
 	}
 }
 
-void DV::pingOthers(bool onlyOnce)
+void Hermes::pingOthers(bool onlyOnce)
 {
 	struct sockaddr_in dest_addr;
 	dest_addr.sin_family = AF_INET;
 	dest_addr.sin_port = htons(PORT);
 	int dest_sockfd;
 
-	//Ping everyone every @pinging_period seconds
+	//Ping everyone every @pingingPeriod seconds
 	do
 	{
 		//Need to check for timeouts first (important!)
 		checkTimeOuts();
 
-		for (int i = 0; i < destinations_count; ++i)
+		for (int i = 0; i < destinationsCount; ++i)
 		{
-			if (my_ip == destination_ips[i])
+			if (myIp == destinationIps[i])
 				continue;
 
-			string message = to_string(destination_ips[i]);
-			print("Sending {"+destination_ips[i]+"} message : " + message);
+			string message = to_string(destinationIps[i]);
+			print("Sending {"+destinationIps[i]+"} message : " + message);
 
-			const char* destination = destination_ips[i].c_str();
+			const char* destination = destinationIps[i].c_str();
 			inet_pton(AF_INET, destination, &dest_addr.sin_addr);
 
 			if(dest_sockfd = socket(AF_INET, SOCK_DGRAM, 0) <0 )
@@ -160,47 +159,47 @@ void DV::pingOthers(bool onlyOnce)
 			    sizeof(dest_addr)); 
 			close(dest_sockfd); 
 		}
-	    	std::this_thread::sleep_for(std::chrono::seconds(pinging_period));
+	    	std::this_thread::sleep_for(std::chrono::seconds(pingingPeriod));
 	}while(!onlyOnce);
 }
 
-bool DV::updateDV(const char* message, const char* sourceIP)
+bool Hermes::updateDV(const char* message, const char* sourceIP)
 {
 	bool updated = false;
 
-	if(ip_id.find(sourceIP) == ip_id.end())	//IDK about the source!! do nothing.
+	if(ipToId.find(sourceIP) == ipToId.end())	//IDK about the source!! do nothing.
 		return false;
 
-	timed_out_nodes[sourceIP] = false; //I now know that this node didn't time out
+	timedOutNodes[sourceIP] = false; //I now know that this node didn't time out
 
 	//update when I last heared from this node.
     	time_t curr_time = time (NULL);
-    	nodes_times[sourceIP] = curr_time;
+    	nodesTimes[sourceIP] = curr_time;
 
-	int sourceID = ip_id[sourceIP];
+	int sourceID = ipToId[sourceIP];
 
-	DV_entry* otherDV = DV_from_string(message, destinations_count);
+	DistanceVectorEntry* otherDV = distancVectorFromString(message, destinationsCount);
 
 	int reach_count = 0;
-	for (int i = 0; i < destinations_count; ++i)
+	for (int i = 0; i < destinationsCount; ++i)
 	{
 		string ip = otherDV[i].targetIP;
 		double cost = otherDV[i].cost + 1; //One extra hop to get to the node I received the message from
 		if (cost <=2) //Can directly reach
 			reach_count++;
-		int id = ip_id[ip];
+		int id = ipToId[ip];
 
-		if (cost < myDV[id].cost) //The new cost is better, need to update my DV.
+		if (cost < distanceVector[id].cost) //The new cost is better, need to update my DV.
 		{
 			updated = true;
-			myDV[id] = DV_entry(cost, sourceID, ip);
+			distanceVector[id] = DistanceVectorEntry(cost, sourceID, ip);
 		}
 	}
 
-	if(reach_count>=destinations_count - 1) // Can reach everyone directly
-		nodes_bridge[sourceIP] = true;
+	if(reach_count>=destinationsCount - 1) // Can reach everyone directly
+		isBridgeNode[sourceIP] = true;
 	else
-		nodes_bridge[sourceIP] = false;
+		isBridgeNode[sourceIP] = false;
 
 	delete[] otherDV;
 	if(updated)
@@ -212,7 +211,7 @@ bool DV::updateDV(const char* message, const char* sourceIP)
 	return updated;
 }
 
-void DV::receiveMessages()
+void Hermes::receiveMessages()
 {
     int sockfd; 
     char buffer[BUFFSIZE]; 
@@ -264,7 +263,7 @@ void DV::receiveMessages()
     assert(false);
 }
 
-const void DV::installRule(string rule)
+const void Hermes::installRule(string rule)
 {
 	print("Installing rule: " + rule);
 	system(rule.c_str());
@@ -282,7 +281,7 @@ const void DV::installRule(string rule)
  * 4 => CONTROLLER TRAFFIC
  * 5 => OTHER?	(not used.)
  */
-const void DV::updateOF()
+const void Hermes::updateOF()
 {
 	if(updating)
 		return;
@@ -302,55 +301,49 @@ const void DV::updateOF()
 	installRule("ovs-ofctl add-flow br0 cookie=4,priority=5000,ip,nw_proto=17,tp_dst=8080,action=normal");
 
 	int reach_count = 0;
-	for (int i = 0; i < destinations_count; ++i)
+	for (int i = 0; i < destinationsCount; ++i)
 	{
-		if (myDV[i].cost >= MAX_COST || destination_ips[i] == my_ip) //Cannot really reach it, install nothing.
+		if (distanceVector[i].cost >= MAX_COST || destinationIps[i] == myIp) //Cannot really reach it, install nothing.
 			continue;
 
-		string dest_ip = destination_ips[i];
-		string dest_mac = destination_macs[i];
-		string through_ip = destination_ips[myDV[i].throughID];
-		string through_mac = destination_macs[myDV[i].throughID];
+		string dest_ip = destinationIps[i];
+		string dest_mac = destinationMacs[i];
+		string through_ip = destinationIps[distanceVector[i].throughID];
+		string through_mac = destinationMacs[distanceVector[i].throughID];
 
-		double cost = myDV[i].cost; 
+		double cost = distanceVector[i].cost; 
 		if (cost <=1) //Can directly reach
 			reach_count++;
 
 		//Modify packets passing through me
-		rule = "ovs-ofctl add-flow br0 cookie=3,priority=500,ip,in_port=1,nw_dst="+dest_ip+",action=mod_dl_dst:"+through_mac+",mod_dl_src:"+my_mac+",in_port";
+		rule = "ovs-ofctl add-flow br0 cookie=3,priority=500,ip,in_port=1,nw_dst="+dest_ip+",action=mod_dl_dst:"+through_mac+",mod_dl_src:"+myMac+",in_port";
 		installRule(rule);
 
 		//Modify packets going out of me.
-		rule = "ovs-ofctl add-flow br0 cookie=2,priority=500,ip,nw_dst="+dest_ip+",action=mod_dl_dst:"+through_mac+",mod_dl_src:"+my_mac+",1";
+		rule = "ovs-ofctl add-flow br0 cookie=2,priority=500,ip,nw_dst="+dest_ip+",action=mod_dl_dst:"+through_mac+",mod_dl_src:"+myMac+",1";
 		installRule(rule);
 	}
 
-	if(reach_count>=destinations_count) // Can reach everyone directly
-		nodes_bridge[my_ip] = true;
+	if(reach_count>=destinationsCount) // Can reach everyone directly
+		isBridgeNode[myIp] = true;
 	else
-		nodes_bridge[my_ip] = false;
+		isBridgeNode[myIp] = false;
 
 	updating = false;
 }
-
-bool DV::done()
-{
-	return false;
-}
-
-void DV::printDV()
+void Hermes::printDV()
 {
 	print("CurrentDV: " + to_string());
 }
 
-vector<string> DV::getBridgeNodes()
+vector<string> Hermes::getBridgeNodes()
 {
 	vector<string> ret;
 
-	for (int i = 0; i < destinations_count; ++i)
+	for (int i = 0; i < destinationsCount; ++i)
 	{
-		if(nodes_bridge[destination_ips[i]])
-			ret.push_back(destination_ips[i]);
+		if(isBridgeNode[destinationIps[i]])
+			ret.push_back(destinationIps[i]);
 	}
 
 	return ret;
