@@ -45,8 +45,9 @@ void printUsage()
  * Uses the "cookie" value of 10 (0xa) for the installed OpenFlow rules. 
  * This helps with healing the partition as we only remove rules with 0xa. 
  * Make sure no other rules in the OpenFlow table use the cookie 0xa as well.
- * @g1 \\TODO
- * @g2 \\TODO
+ * 
+ * @g1: Vector of g1 members MAC addresses
+ * @g2: Vector of g2 members MAC addresses
  */
 void createMACPNP(const vector<string> g1, const vector<string> g2)
 {
