@@ -1,7 +1,9 @@
 Hermes
 =======
 
-TODO: We need a short paragprah to define Hermes.
+Hermes is a transparent communication layer that masks partial network partitions. Partial partitions are a special kind of network partitions that divides the cluster into three groups of nodes (group 1, 2, and 3) such that groups 1 and 2 are disconnected from each other while nodes in group 3 can communicate with all cluster nodes (See figure below). Hermes follows a peer-to-peer design in which every node in the cluster runs a Hermes process. These processes collaborate in monitoring cluster connectivity. When Hermes detects a partial partition, it detours the traffic around the partition through intermediate nodes (e.g., nodes in group 3 in the figure).
+
+![pnp](pnp.png?raw=true)
 
 Setup
 -------
