@@ -15,7 +15,6 @@
 #include <algorithm>
 #include "hermes.h"
 
-
 using namespace std;
 
 
@@ -33,11 +32,13 @@ string Hermes::to_string(string targetIP)
 	return ret;
 }
 
+
 void Hermes::print(string msg, bool forcePrint)
 {
 	if(verbose || forcePrint)
 		printf("%s\n", msg.c_str());
 }
+
 
 DistanceVectorEntry* distancVectorFromString(const char* message, int len)
 {
@@ -60,7 +61,7 @@ DistanceVectorEntry* distancVectorFromString(const char* message, int len)
 
 
 Hermes::Hermes(std::string _myIp, std::string _myMac, unsigned int _pingingPeriod, unsigned int _destinationsCount,
- std::string* _destinationIps, std::string* _destinationMacs, bool _verbose)
+	       std::string* _destinationIps, std::string* _destinationMacs, bool _verbose)
 {
 	myIp = _myIp;
 	myMac = _myMac;
@@ -72,15 +73,20 @@ Hermes::Hermes(std::string _myIp, std::string _myMac, unsigned int _pingingPerio
 
 	distanceVector = new DistanceVectorEntry[destinationsCount];
 	init();
+	
 	//A seperate thread to ping others.
-	pingingThread = std::thread (&Hermes::pingOthers,this, false);
+	// TODO move the steps that bootstrap Hermes to a seperate function.
+	// Maybe call it 
+	pingingThread = std::thread (&Hermes::pingOthers, this, false);
 	receiveMessages();
 }
+
 
 Hermes::~Hermes()
 {
 	delete[] distanceVector;
 }
+
 
 void Hermes::init()
 {
@@ -88,16 +94,17 @@ void Hermes::init()
 	{
 		ipToId[destinationIps[i]] = i;
 
-		distanceVector[i] = DistanceVectorEntry(MAX_COST, -1,destinationIps[i]);
+		distanceVector[i] = DistanceVectorEntry(MAX_COST, -1, destinationIps[i]);
 		if(destinationIps[i] == myIp)
 			distanceVector[i] = DistanceVectorEntry(0.0, i, myIp); //Cost to reach myself
 	}
 	updateOF();
 }
 
+
 void Hermes::nodeTimedOut(string ip)
 {
-	//I already know that I cannot reach this one, do nothing. 
+	// I already know that I cannot reach this one, do nothing. 
 	if(timedOutNodes.find(ip) != timedOutNodes.end() && timedOutNodes[ip])
 		return;
 
@@ -111,6 +118,7 @@ void Hermes::nodeTimedOut(string ip)
 		}
 	}
 }
+
 
 void Hermes::checkTimeOuts()
 {
@@ -126,6 +134,7 @@ void Hermes::checkTimeOuts()
 			nodeTimedOut(destinationIps[i]);	
 	}
 }
+
 
 void Hermes::pingOthers(bool onlyOnce)
 {
@@ -155,13 +164,14 @@ void Hermes::pingOthers(bool onlyOnce)
 				perror("socket creation failed in pingOthers"); 
 
 			int sendingResult = sendto(dest_sockfd, (const char *)message.c_str(), strlen(message.c_str()),  
-			MSG_CONFIRM, (const struct sockaddr *) &dest_addr, 
-			    sizeof(dest_addr)); 
+						   MSG_CONFIRM, (const struct sockaddr *) &dest_addr, 
+			    			   sizeof(dest_addr)); 
 			close(dest_sockfd); 
 		}
 	    	std::this_thread::sleep_for(std::chrono::seconds(pingingPeriod));
 	}while(!onlyOnce);
 }
+
 
 bool Hermes::updateDV(const char* message, const char* sourceIP)
 {
@@ -170,9 +180,9 @@ bool Hermes::updateDV(const char* message, const char* sourceIP)
 	if(ipToId.find(sourceIP) == ipToId.end())	//IDK about the source!! do nothing.
 		return false;
 
-	timedOutNodes[sourceIP] = false; //I now know that this node didn't time out
+	timedOutNodes[sourceIP] = false; // I now know that this node didn't time out
 
-	//update when I last heared from this node.
+	// Update when I last heared from this node.
     	time_t curr_time = time (NULL);
     	nodesTimes[sourceIP] = curr_time;
 
@@ -211,12 +221,13 @@ bool Hermes::updateDV(const char* message, const char* sourceIP)
 	return updated;
 }
 
+
 void Hermes::receiveMessages()
 {
     int sockfd; 
     char buffer[BUFFSIZE]; 
     struct sockaddr_in servaddr, cliaddr; 
-    char adder_buffer[20];
+    char adder_buffer[20];  // TODO define the 20 as a macro
 
     // Creating socket file descriptor 
     if ( (sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0 ) { 
@@ -245,10 +256,8 @@ void Hermes::receiveMessages()
     {
 	    unsigned int len; 
 	    int n = recvfrom(sockfd, (char *)buffer, BUFFSIZE,  
-	                MSG_WAITALL, ( struct sockaddr *) &cliaddr, 
-	                &len); 
+	                     MSG_WAITALL, ( struct sockaddr *) &cliaddr, &len); 
 	    buffer[n] = '\0'; 
-
 
 	    inet_ntop(AF_INET, &(cliaddr.sin_addr), adder_buffer, 20);
 	    string address = adder_buffer;
@@ -262,6 +271,7 @@ void Hermes::receiveMessages()
     close(sockfd);
     assert(false);
 }
+
 
 const void Hermes::installRule(string rule)
 {
@@ -331,10 +341,13 @@ const void Hermes::updateOF()
 
 	updating = false;
 }
+
+
 void Hermes::printDV()
 {
 	print("CurrentDV: " + to_string());
 }
+
 
 vector<string> Hermes::getBridgeNodes()
 {
