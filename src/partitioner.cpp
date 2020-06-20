@@ -20,6 +20,7 @@ void installRule(string rule)
 	system(rule.c_str());
 }
 
+
 /**
  * A function to output a help message to the user of the code
  * showing how to run the code and what parameters to give it 
@@ -38,11 +39,14 @@ void printUsage()
 	exit(1);
 }
 
+
 /**
- * Creates a MAC-based PNP where g1 cannot reach g2. (everyone else can reach both)
+ * Creates a MAC-based partial parition where g1 cannot reach g2. (everyone else can reach both)
  * Uses the "cookie" value of 10 (0xa) for the installed OpenFlow rules. 
  * This helps with healing the partition as we only remove rules with 0xa. 
  * Make sure no other rules in the OpenFlow table use the cookie 0xa as well.
+ * @g1 \\TODO
+ * @g2 \\TODO
  */
 void createMACPNP(const vector<string> g1, const vector<string> g2)
 {
@@ -57,12 +61,14 @@ void createMACPNP(const vector<string> g1, const vector<string> g2)
 	//Do nothing otherwise (I'm part of g3)
 }
 
+
 /**
  * Driver code for the partitioner.
  */
 int main(int argc, char** argv)
 {
 	ifstream fin;
+	// parse the command line arguments
 	try
 	{
 		fin.exceptions(std::ifstream::failbit | std::ifstream::badbit);
@@ -86,32 +92,39 @@ int main(int argc, char** argv)
 	}
 
 	int n;
+	// parse the first group addresses from the file
 	fin>>n;
 	vector<string> g1;
 	vector<string> g2;
 	while(n--)
 	{
-		string temp;fin>>temp;
-		g1.push_back(temp);
+		string addr;
+		fin>>addr;
+		g1.push_back(addr);
 	}
+	
+	// parse the second group addresses from the file
 	fin>>n;
 	while(n--)
 	{
-		string temp;fin>>temp;
-		g2.push_back(temp);
+		string addr;
+		fin>>addr;
+		g2.push_back(addr);
 	}
+	fin.close();
+
 
 	printf("Creating a partial partition between the following group 1 and group 2.\n");
 	printf("Members of group 1: \n");
 	for (int i = 0; i < g1.size(); ++i)
 		printf("%s\n", g1[i].c_str());
+	
 	printf("\n~~~~~~~~~~~~~~~\n\n");
 	printf("Members of group 2: \n");
 	for (int i = 0; i < g2.size(); ++i)
 		printf("%s\n", g2[i].c_str());
 	
 	createMACPNP(g1,g2);
-	fin.close();
 
 	return 0;
 }
