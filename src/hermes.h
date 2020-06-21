@@ -16,10 +16,12 @@ const double MAX_COST = 1001; 	// Anything with a cost more than 1000 is unreach
 #define ADDRSIZE 20 		// Size of address in bytes. 
 
 /**
- * DistanceVectorEntry is the struct that contains infromation about each entry in the distance-vector table (DV). 
+ * DistanceVectorEntry is the struct that contains infromation about each entry 
+ * in the distance-vector table (DV). 
  * The struct contains three information: 
  * @targetIP: the targetIP this entry concerns.
- * @throughID: the ID of the node traffic should be forwarded to next in order to reach to the final distination (@targetIP).
+ * @throughID: the ID of the node traffic should be forwarded to next in 
+ *	       order to reach to the final distination (@targetIP).
  * @cost: the cost (number of hops) of reaching the target. 
  */
 struct DistanceVectorEntry 
@@ -66,7 +68,8 @@ struct DistanceVectorEntry
 
 
 /**
- * Hermes is the main class. It contains information about the distance vector table (DistanceVectorEntry*)
+ * Hermes is the main class. It contains information about 
+ * the distance vector table (DistanceVectorEntry*)
  * and other configuration settings for this Hermes instance.
  */
 class Hermes
@@ -123,7 +126,8 @@ class Hermes
 
 
 	/**
-	* Potentially update the unerlying distance vector table using a @message received from @sourceIP.
+	* Potentially update the unerlying distance vector table 
+	* using a @message received from @sourceIP.
 	*/
 	bool updateDV(const char* message, const char* sourceIP);
 
@@ -190,7 +194,7 @@ public:
 	void start();
 	
 	/**
-	* function to output the entire distance-vector table
+	* Function to output the entire distance-vector table
 	*/
 	void printDV();
     
