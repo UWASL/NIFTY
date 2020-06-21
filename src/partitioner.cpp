@@ -10,7 +10,8 @@ using namespace std;
 string myMac = "";
 
 /**
- * A helper function that calls the underlying system funciton to install a new OVS OpenFlow rule.
+ * A helper function that calls the underlying system funciton to 
+ * install a new OVS OpenFlow rule.
  * 
  * @rule: a string with a command to install an OVS rule
  */
@@ -41,7 +42,8 @@ void printUsage()
 
 
 /**
- * Creates a MAC-based partial parition where g1 cannot reach g2. (everyone else can reach both)
+ * Creates a MAC-based partial parition where g1 cannot reach g2. 
+ * (everyone else can reach both)
  * Uses the "cookie" value of 10 (0xa) for the installed OpenFlow rules. 
  * This helps with healing the partition as we only remove rules with 0xa. 
  * Make sure no other rules in the OpenFlow table use the cookie 0xa as well.
@@ -51,15 +53,17 @@ void printUsage()
  */
 void createMACPNP(const vector<string> g1, const vector<string> g2)
 {
-	if(find(g1.begin(), g1.end(), myMac)!=g1.end()) {// I'm in g1, shouldn't reach any g2 members
+	if(find(g1.begin(), g1.end(), myMac)!=g1.end()) {
+		// I'm in g1, shouldn't reach any g2 members
 		for (int i = 0; i < g2.size(); ++i)
 			installRule("ovs-ofctl add-flow br0 cookie=10,priority=10000,dl_src="+g2[i]+",action=drop");
 	}
 	else if(find(g2.begin(), g2.end(), myMac)!=g2.end()) {
+		// I'm in g2, shouldn't reach any g3 members
 		for (int i = 0; i < g1.size(); ++i)
 			installRule("ovs-ofctl add-flow br0 cookie=10,priority=10000,dl_src="+g1[i]+",action=drop");
 	}
-	//Do nothing otherwise (I'm part of g3)
+	//Do nothing otherwise (this applies to nodes that are not affected by the parition)
 }
 
 
@@ -80,7 +84,8 @@ int main(int argc, char** argv)
 		else if (argc == 1)
 		{
 			// No command line arguments are provided
-			// heal all current partial network paritions by deleting the flow rules with a cookie=10
+			// heal all current partial network paritions by deleting 
+			// the flow rules with a cookie=10
 			installRule("ovs-ofctl del-flows br0 cookie=10/-1");
 			exit(0);
 		}
