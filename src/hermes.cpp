@@ -74,12 +74,15 @@ Hermes::Hermes(std::string _myIp, std::string _myMac, unsigned int _pingingPerio
 	distanceVector = new DistanceVectorEntry[destinationsCount];
 	init();
 }
+
+
 void Hermes::start()
 {
 	//A seperate thread to ping others.
 	pingingThread = std::thread (&Hermes::pingOthers, this, false);
 	receiveMessages();
 }
+
 
 Hermes::~Hermes()
 {
@@ -110,7 +113,8 @@ void Hermes::nodeTimedOut(string ip)
 	print("Node " + ip + " had timedout!!");
 	for (int i = 0; i < destinationsCount; ++i)
 	{
-		if (distanceVector[i].throughID>= 0 && destinationIps[distanceVector[i].throughID] == ip) //Used to go through this node, it's inf now!
+		if (distanceVector[i].throughID >= 0 
+		    && destinationIps[distanceVector[i].throughID] == ip) //Used to go through this node, it's inf now!
 		{
 			distanceVector[i].cost = MAX_COST;
 			distanceVector[i].throughID = -1;
@@ -162,7 +166,8 @@ void Hermes::pingOthers(bool onlyOnce)
 			if(dest_sockfd = socket(AF_INET, SOCK_DGRAM, 0) <0 )
 				perror("socket creation failed in pingOthers"); 
 
-			int sendingResult = sendto(dest_sockfd, (const char *)message.c_str(), strlen(message.c_str()),  
+			int sendingResult = sendto(dest_sockfd, (const char *)message.c_str(), 
+						   strlen(message.c_str()),  
 						   MSG_CONFIRM, (const struct sockaddr *) &dest_addr, 
 			    			   sizeof(dest_addr)); 
 			close(dest_sockfd); 
@@ -176,7 +181,7 @@ bool Hermes::updateDV(const char* message, const char* sourceIP)
 {
 	bool updated = false;
 
-	if(ipToId.find(sourceIP) == ipToId.end())	//IDK about the source!! do nothing.
+	if(ipToId.find(sourceIP) == ipToId.end())  //IDK about the source!! do nothing.
 		return false;
 
 	timedOutNodes[sourceIP] = false; // I now know that this node didn't time out
@@ -279,8 +284,10 @@ const void Hermes::installRule(string rule)
 
 
 /**
- * Update the rules in the OVS's OpenFlow table using the data in the distance vector table.
- * Uses different cookie numbers for different rules (used to have a more targeted analysis of the traffic in the system)
+ * Update the rules in the OVS's OpenFlow table using the data in 
+ * the distance vector table.
+ * Uses different cookie numbers for different rules (used to 
+ * have a more targeted analysis of the traffic in the system)
  *
  * ****COOKIES TABLE*****
  * 1 => IN_TRAFFIC: DATA SENT TO ME
