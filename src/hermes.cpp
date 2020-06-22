@@ -187,8 +187,8 @@ bool Hermes::updateDV(const char* message, const char* sourceIP)
 	timedOutNodes[sourceIP] = false; // I now know that this node didn't time out
 
 	// Update when I last heared from this node.
-    	time_t curr_time = time (NULL);
-    	nodesTimes[sourceIP] = curr_time;
+	time_t curr_time = time (NULL);
+	nodesTimes[sourceIP] = curr_time;
 
 	int sourceID = ipToId[sourceIP];
 
