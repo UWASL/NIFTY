@@ -162,8 +162,8 @@ void Hermes::pingOthers(bool onlyOnce)
 
 			const char* destination = destinationIps[i].c_str();
 			inet_pton(AF_INET, destination, &dest_addr.sin_addr);
-
-			if(dest_sockfd = socket(AF_INET, SOCK_DGRAM, 0) <0 )
+			dest_sockfd = socket(AF_INET, SOCK_DGRAM, 0);
+			if(dest_sockfd < 0 )
 				perror("socket creation failed in pingOthers"); 
 
 			int sendingResult = sendto(dest_sockfd, (const char *)message.c_str(), 
@@ -233,8 +233,9 @@ void Hermes::receiveMessages()
     struct sockaddr_in servaddr, cliaddr; 
     char adder_buffer[ADDRSIZE];
 
-    // Creating socket file descriptor 
-    if ( (sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0 ) { 
+    // Creating socket file descriptor
+   sockfd = socket(AF_INET, SOCK_DGRAM, 0); 
+    if ( sockfd< 0 ) { 
         perror("socket creation failed"); 
         exit(EXIT_FAILURE); 
     } 
@@ -258,7 +259,8 @@ void Hermes::receiveMessages()
     //Keep listening for others messages.
     while(true)
     {
-	    unsigned int len; 
+	    unsigned int len;
+            len = sizeof(struct sockaddr_in); 
 	    int n = recvfrom(sockfd, (char *)buffer, BUFFSIZE,  
 	                     MSG_WAITALL, ( struct sockaddr *) &cliaddr, &len); 
 	    buffer[n] = '\0'; 
