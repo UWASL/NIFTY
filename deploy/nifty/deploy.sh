@@ -37,6 +37,7 @@ do
 	scp $sshOptions ./temp.conf $nodeIP:"${NIFTY_HOME}/nodes.conf"
 	
 	echo "Starting NIFTY on node $nodeIP (which has IP address: $ip, and MAC address: $mac)"
+	# Could need to either run the script as sudo or add sudo here to be able to deploy rules. (or have OVS not require sudo)
 	ssh $sshOptions $nodeIP "sudo $NIFTY_HOME/nifty -t 1 -i $ip -m $mac" &
  
 done < nodes.conf
