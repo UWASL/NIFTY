@@ -23,6 +23,7 @@ do
 	macs="${macs}${mac}\n"
 done < nodes.conf
 
+confFileContents=$(printf "%d\n%b%b" $num $ips $macs)
 # For each of the nodes in deployment, update nodes.conf & run nifty with the nodes IP.
 while IFS= read -r nodeIP
 do
@@ -33,5 +34,5 @@ do
   	ip=$(ssh $sshOptions $nodeIP /sbin/ifconfig br0 | grep 'inet addr' | cut -d: -f2 | awk '{print $1}')
   	mac=$(ssh $sshOptions $nodeIP cat /sys/class/net/br0/address)
 
-  	ssh $sshOptions $nodeIP "printf '%d\n%b%b' $num $ips $macs > $NIFTY_HOME/nodes.conf"
+  	ssh $sshOptions $nodeIP "echo $confFileContents > $NIFTY_HOME/nodes.conf"
 done < nodes.conf
