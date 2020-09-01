@@ -22,7 +22,7 @@ do
 	ips="${ips}${ip}\n"
 	macs="${macs}${mac}\n"
 	let nodesCount=nodesCount+1
-done < nodes.conf
+done < ./nodes.conf
 
 printf "%d\n%b%b" $nodesCount $ips $macs > temp.conf
 # For each of the nodes in deployment, update nodes.conf & run nifty with the nodes IP.
@@ -40,5 +40,5 @@ do
 	# Could need to either run the script as sudo or add sudo here to be able to deploy rules. (or have OVS not require sudo)
 	ssh $sshOptions $nodeIP "sudo $NIFTY_HOME/nifty -t 1 -i $ip -m $mac" &
  
-done < nodes.conf
+done < ./nodes.conf
 rm ./temp.conf

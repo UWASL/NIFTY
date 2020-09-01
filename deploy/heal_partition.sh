@@ -16,4 +16,4 @@ do
 	# Could need to either run the script as sudo or add sudo here to be able to deploy rules. (or have OVS not require sudo)
 	ssh $sshOptions $nodeIP "sudo $NIFTY_HOME/partitioner" &
  
-done < nodes.conf
+done < ./nodes.conf
