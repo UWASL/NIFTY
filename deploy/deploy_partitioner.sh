@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # get NIFTY_HOME
-. ../../configuration
+. ../configuration
 
 # If your ssh need more options, you can set them in the $sshOptions variable (you can set identify file, port, ...)
 sshOptions=" -T -o StrictHostKeyChecking=no -i /proj/sds-PG0/mohammed/pnpdaemon/scripts/id_rsa "
