@@ -17,6 +17,6 @@ do
   	scp $sshOptions ./parts.conf $nodeIP:"${NIFTY_HOME}/parts.conf"
 	echo "Starting Partitioner on node $nodeIP (which has MAC address: $mac)"
 	# Could need to either run the script as sudo or add sudo here to be able to deploy rules. (or have OVS not require sudo)
-	ssh $sshOptions $nodeIP "cd $NIFTY_HOME && sudo ./partitioner $mac" &
+	ssh $sshOptions $nodeIP "cd $NIFTY_HOME && sudo ./partitioner $mac"
  
 done < ./nodes.conf

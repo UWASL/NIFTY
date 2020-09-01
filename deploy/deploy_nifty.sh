@@ -41,4 +41,6 @@ do
 	ssh $sshOptions $nodeIP "cd $NIFTY_HOME && sudo ./nifty -t 1 -i $ip -m $mac" &
  
 done < ./nodes.conf
+wait
+
 rm ./temp.conf
