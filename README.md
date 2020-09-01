@@ -31,10 +31,10 @@ Usage
 -------
 There are two main excutables. Herems and Partitioner. Nifty is the fault tolerance layer that protects against partial network partitions, whereas Partitioner is a simple tool that can be used to inject partial partitions (for testing purposes). Both of these requre OVS and assume the bridge is called br0 (see setup above).
 
-The deploy direcotry contains script for deploying Nifty on a cluster.
+The ```deploy``` direcotry contains script for deploying Nifty on a cluster.
 
 
 Example
 -------
 
-The example direcotry contains a simple example for using the Nifty and the partitioner.
+The ```example``` direcotry contains a simple example for using the Nifty and the partitioner.
