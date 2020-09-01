@@ -44,6 +44,11 @@ node3_MAC
 This effectively defines a partition between node2 and node3, while node1 can communicate with all the nodes.
 
 4. Run the script ./deploy_partitioner.sh
+
+```bash
+./deploy_partitioner.sh
+```
+
 This will create a partition spacified in parts.conf
 
 6. **Test this** by logging into nodes 1,2, and 3. You now should not be able to ping node 2 from node 3 (and vice versa) but should be able to ping nodes 2 and 3 from node 1.
@@ -77,6 +82,11 @@ Redo steps 1 and 2 from example 1 above.
 ```
 
 4. Create a parition using the the script ./deploy_partitioner.sh
+
+```bash
+./deploy_partitioner.sh
+```
+
 This will create a partition spacified in parts.conf
 
 9. **Test this** by logging into nodes 1,2, and 3. You should still be able to ping all the nodes from all the nodes, despite the partition.
