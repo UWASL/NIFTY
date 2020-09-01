@@ -1,6 +1,3 @@
-NIFTY Deployment
-=======
-
 The scripts in this folder are meant to facilitate the deployment of NIFTY and Partitioner on multiple machines.
 
 There are three scripts:
@@ -23,16 +20,26 @@ modify the scripts in case any of these assumptions don't hold (if possible).
 3. We assume that you do not need sudo privileges to install openflow rules in OVS of the nodes you ssh into. If this doesn't hold, you can change the lines in the scripts that call Nifty or Partitioner in other nodes (the scripts have a comment that makes this change easy)
 
 
-nodes.conf structure
--------
+NIFTY Deployment
+=======
 
-nodes.conf is a simple configuration file that contains a list of all the nodes (hostnames) you want to deploy Nifty on. Each hostname (or IP address) needs to be on a single line.
+In order for Nifty to run properly on a cluster, you will need to fill the config file nodes.conf. 
+nodes.conf should contain the IP addresses of all the nodes in the cluster. Each hostname (or IP address) needs to be on a single line. It's structured as follows:
 
-parts.conf structure
--------
+To deply NIFTY on the nodes in the nodes.conf just simple call the deployment script
 
-parts.conf defines how the partial partition looks like, and between which nodes. The structure of this file is the same as the structure of parts.conf in the main Nifty directory. 
-e.g., if parts.conf contains the following,
+```
+./deploy_nifty
+```
+
+ 
+Partitioner Deployment
+=======
+
+To use Partitioner, you need a config the parts.conf file which specifies the parition. 
+
+The structure of the config file is as follows:
+First line is an integer that represents the number of nodes in the first group (n). The next n lines list the MAC addresses of these nodes. Next line is an integer the represents the number of nodes in the second group (m). The next m lines list the MAC addresses of these nodes. e.g.,
 
 ```
 1
@@ -42,7 +49,35 @@ MAC2
 MAC3
 ```
 
-The partitioner is created between the node that has MAC1 and the two nodes with macs (MAC2 and MAC3). Other nodes in nodes.conf are bridge nodes, i.e., can access all other nodes.
+The example parts.conf above specifies a partition in which MAC1 is on one side and the two nodes with macs (MAC2 and MAC3) are on another. Other nodes that are not listed in parts.conf are not affected by the partition, i.e., can access all other nodes. 
+To help you in configuring parts.conf, we include a helper script (detailed bellow) to discover the MAC addresses in a cluster.
+
+Once you configure parts.conf you can run the partitioner to create the partition.
+
+```
+./deploy_partitioner
+```
+
+To heal a partition, simple call the heal script
+
+```
+./heal_partition
+```
+
+Helper Scripts
+=======
+
+To configure parts.conf you need to know the MAC addresses of all the nodes in the cluster. We include a simple script to print out all the MAC addresses.
+
+Simple run the helper script as follows:
+
+
+```
+./print_MACS nodes.conf
+```
+
+This script will print the MAC address of every IP address found in nodes.conf
+
 
 
 Nifty Example
