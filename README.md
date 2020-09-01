@@ -37,4 +37,4 @@ The ```deploy``` direcotry contains script for deploying Nifty on a cluster.
 Example
 -------
 
-The ```example``` direcotry contains a simple example for using the Nifty and the partitioner.
+The ```example``` direcotry contains a simple example for using Nifty and the partitioner.
