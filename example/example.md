@@ -17,9 +17,14 @@ In this example we will create a partition on a cluster. The cluster does not us
 1. Log into all the nodes, and make sure that all the nodes can ping each other.
 
 ```bash
-node2$ ping node3
-PING node3 (10.0.0.3) 56(84) bytes of data.
-64 bytes from 10.0.0.3 (10.0.0.3): icmp_seq=1 ttl=55 time=20.6 ms
+node2$ ping -c3 node3
+PING node3-link-0 (192.168.1.103) 56(84) bytes of data.
+64 bytes from node3-link-0 (192.168.1.103): icmp_seq=1 ttl=64 time=1.45 ms
+64 bytes from node3-link-0 (192.168.1.103): icmp_seq=2 ttl=64 time=0.311 ms
+64 bytes from node3-link-0 (192.168.1.103): icmp_seq=3 ttl=64 time=0.327 ms
+
+--- node3-link-0 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2001ms
 ```
 
 2. From the controller node, modify nodes.conf in the deploy folder to include the hostnames (or IPs) of nodes 1,2, and 3.
@@ -45,7 +50,7 @@ This effectively defines a partition between node2 and node3, while node1 can co
 4. Run the script ./deploy_partitioner.sh
 
 ```bash
-./deploy_partitioner.sh
+node1$ sudo ./deploy_partitioner.sh
 ```
 
 This will create a partition spacified in parts.conf
@@ -53,18 +58,17 @@ This will create a partition spacified in parts.conf
 6. **Test this** by logging into nodes 1,2, and 3. You now should not be able to ping node 2 from node 3 (and vice versa) but should be able to ping nodes 2 and 3 from node 1.
 
 ```bash
-node2$ ping node3
-PING node3 (10.0.0.3) 56(84) bytes of data.
-^C
---- 10.0.0.3 ping statistics ---
-12 packets transmitted, 0 received, 100% packet loss, time 11244ms
+node2$ ping -c3 node3
+PING node3-link-0 (192.168.1.103) 56(84) bytes of data.
 
+--- node3-link-0 ping statistics ---
+3 packets transmitted, 0 received, 100% packet loss, time 2015ms
 ```
 
 7. Heal the parition using the heal script.
 
 ```bash
-./heal_partition.sh
+node1$ sudo ./heal_partition.sh
 ```
 
 Now let's see how the this example is different when we have Nifty running in the system
@@ -79,13 +83,13 @@ Redo steps 1 and 2 from example 1 above.
 1. Deploy Nifty using the deployment script found in the ```deploy``` directory.
 
 ```bash
-./deploy_nifty
+node1$ sudo ./deploy_nifty.sh
 ```
 
 4. Create a parition using the the script ./deploy_partitioner.sh
 
 ```bash
-./deploy_partitioner.sh
+node1$ sudo ./deploy_partitioner.sh
 ```
 
 This will create a partition spacified in parts.conf
@@ -93,9 +97,15 @@ This will create a partition spacified in parts.conf
 9. **Test this** by logging into nodes 1,2, and 3. You should still be able to ping all the nodes from all the nodes, despite the partition.
 
 ```bash
-node2$ ping node3
-PING node3 (10.0.0.3) 56(84) bytes of data.
-64 bytes from 10.0.0.3 (10.0.0.3): icmp_seq=1 ttl=55 time=20.6 ms
+node2$ ping -c3 node3
+PING node3-link-0 (192.168.1.103) 56(84) bytes of data.
+64 bytes from node3-link-0 (192.168.1.103): icmp_seq=1 ttl=64 time=0.301 ms
+64 bytes from node3-link-0 (192.168.1.103): icmp_seq=2 ttl=64 time=0.334 ms
+64 bytes from node3-link-0 (192.168.1.103): icmp_seq=3 ttl=64 time=0.360 ms
+
+--- node3-link-0 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 1999ms
+rtt min/avg/max/mdev = 0.301/0.331/0.360/0.032 ms
 ```
 
 That is because Nifty creates alternative routes in the network to mask the partition.
