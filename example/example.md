@@ -62,7 +62,7 @@ Next we will use Nifty to mask the partition.
 ```
 
 8. After a few seconds, Nifty should be able to mask the partition by creating alternatives routes and deploying new rules in OVS of the nodes.
-9. **Test this** by logging into nodes 1,2, and 3. You should now be able to ping all the nodes from all the nodes.
+9. **Test this** by logging into nodes 1, 2, and 3. You should now be able to ping all the nodes from all the nodes.
 
 ```bash
 node2$ ping node3
