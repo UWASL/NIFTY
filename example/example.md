@@ -14,7 +14,6 @@ Example 1: A Partition without Nifty
 
 In this example we will create a partition on a cluster. The cluster does not use Nifty.
 
-### Steps
 1. Log into all the nodes, and make sure that all the nodes can ping each other.
 
 ```bash
@@ -67,6 +66,8 @@ PING node3 (10.0.0.3) 56(84) bytes of data.
 ```bash
 ./heal_partition.sh
 ```
+
+Now let's see how the this example is different when we have Nifty running in the system
 
 Example 2: A Partition while using Nifty
 -------
