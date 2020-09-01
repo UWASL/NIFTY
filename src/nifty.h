@@ -1,5 +1,5 @@
 /**
- * This is a header file that contains the skeleton for the main class of Hermes 
+ * This is a header file that contains the skeleton for the main class of Nifty 
  * and the implementation of the Distance Vectory Entry class.
  */
 
@@ -11,8 +11,8 @@
 
 using namespace std;
 const double MAX_COST = 1001; 	// Anything with a cost more than 1000 is unreachable
-#define PORT     8080 		// Hermes instances use this port to communicate with each other
-#define BUFFSIZE 1024 		// Maximum size of a single message sent between Hermes instances (in bytes)
+#define PORT     8080 		// Nifty instances use this port to communicate with each other
+#define BUFFSIZE 1024 		// Maximum size of a single message sent between Nifty instances (in bytes)
 #define ADDRSIZE 20 		// Size of address in bytes. 
 
 /**
@@ -68,11 +68,11 @@ struct DistanceVectorEntry
 
 
 /**
- * Hermes is the main class. It contains information about 
+ * Nifty is the main class. It contains information about 
  * the distance vector table (DistanceVectorEntry*)
- * and other configuration settings for this Hermes instance.
+ * and other configuration settings for this Nifty instance.
  */
-class Hermes
+class Nifty
 {
 	unsigned int destinationsCount;		// number of nodes in the system (-1)
 	unsigned int pingingPeriod;		// the period for heartbeat messages to check reachability
@@ -185,11 +185,11 @@ public:
 	 * @_destinationIps: IP addresses of other nodes in the system.
 	 * @_destinationMacs: MAC addresses of other nodes in the system.
 	 */
-	Hermes(std::string _myIp, std::string _myMac, unsigned int _pingingPeriod, unsigned int _destinationsCount,
+	Nifty(std::string _myIp, std::string _myMac, unsigned int _pingingPeriod, unsigned int _destinationsCount,
 	       std::string* _destinationIps, std::string* _destinationMacs, bool _verbose = false);
 
 	/**
-	 * Starts the Hermes process. Start receiving messages and pinging others.
+	 * Starts the Nifty process. Start receiving messages and pinging others.
 	 */
 	void start();
 	
@@ -201,5 +201,5 @@ public:
 	/**
 	* Destructor. Deletes the underlying data structures (distance vector)
 	*/
-	~Hermes();
+	~Nifty();
 };

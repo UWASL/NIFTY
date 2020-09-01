@@ -1,5 +1,5 @@
 /**
- * The partitioner.cpp code is used to help test Hermes
+ * The partitioner.cpp code is used to help test Nifty
  * by introducing artificial partitions between the nodes
  */
 

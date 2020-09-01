@@ -1,14 +1,14 @@
-Hermes
+Nifty
 =======
 
-Hermes is a transparent communication layer that masks partial network partitions. Partial partitions are a special kind of network partitions that divides the cluster into three groups of nodes (group 1, 2, and 3) such that groups 1 and 2 are disconnected from each other while nodes in group 3 can communicate with all cluster nodes (See figure below). Hermes follows a peer-to-peer design in which every node in the cluster runs a Hermes process. These processes collaborate in monitoring cluster connectivity. When Hermes detects a partial partition, it detours the traffic around the partition through intermediate nodes (e.g., nodes in group 3 in the figure).
+Nifty is a transparent communication layer that masks partial network partitions. Partial partitions are a special kind of network partitions that divides the cluster into three groups of nodes (group 1, 2, and 3) such that groups 1 and 2 are disconnected from each other while nodes in group 3 can communicate with all cluster nodes (See figure below). Nifty follows a peer-to-peer design in which every node in the cluster runs a Nifty process. These processes collaborate in monitoring cluster connectivity. When Nifty detects a partial partition, it detours the traffic around the partition through intermediate nodes (e.g., nodes in group 3 in the figure).
 
 ![pnp](pnp.png?raw=true)
 
 Setup
 -------
 
-In order to use Hermes, you need to have OVS installed already, with a bridge called br0. To do that, you can use the following commands (make sure to replace **$INTERFACE_NAME** and **$IP_ADDRESS** with their actual vales):
+In order to use Nifty, you need to have OVS installed already, with a bridge called br0. To do that, you can use the following commands (make sure to replace **$INTERFACE_NAME** and **$IP_ADDRESS** with their actual vales):
 
 ```bash
 $ sudo apt-get update  
@@ -29,11 +29,11 @@ to compile the code and generate the excutables.
 
 Usage
 -------
-There are two main excutables. Herems and Partitioner. Hermes is the fault tolerance layer that protects against partial network partitions, whereas Partitioner is a simple tool that can be used to inject partial partitions (for testing purposes). Both of these requre OVS and assume the bridge is called br0 (see setup above).
+There are two main excutables. Herems and Partitioner. Nifty is the fault tolerance layer that protects against partial network partitions, whereas Partitioner is a simple tool that can be used to inject partial partitions (for testing purposes). Both of these requre OVS and assume the bridge is called br0 (see setup above).
 
-### Hermes
+### Nifty
 
-In order for Hermes to run properly, you will need to fill the config file nodes.conf. This file should contain the IP and MAC addresses of all the nodes in the cluster. It's structured as follows:
+In order for Nifty to run properly, you will need to fill the config file nodes.conf. This file should contain the IP and MAC addresses of all the nodes in the cluster. It's structured as follows:
 
 First line of the file is a single integer representing the number of nodes in the system (n). 
 The next n lines list the IP Addresses of all the nodes.
@@ -48,12 +48,12 @@ MAC2
 ```
 This config file should be the same in all the nodes in the systme. 
 
-Finally, run Hermes on all the nodes as follows:
+Finally, run Nifty on all the nodes as follows:
 
 ```bash
-$ ./hermes -i [ip] -m [mac] -c [conf]
+$ ./nifty -i [ip] -m [mac] -c [conf]
 ```
-Where [ip] and [mac] are the node's IP and MAC addresses, and [conf] is the config file (default is nodes.conf). Hermes could also use other optional parameters, run ./hermes --help to list those.
+Where [ip] and [mac] are the node's IP and MAC addresses, and [conf] is the config file (default is nodes.conf). Nifty could also use other optional parameters, run ./nifty --help to list those.
 
 ### Partitioner
 

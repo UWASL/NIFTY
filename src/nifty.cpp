@@ -1,5 +1,5 @@
 /**
- * Implementation file for the primary class Hermes
+ * Implementation file for the primary class Nifty
  */
 
 #include <sys/types.h> 
@@ -13,12 +13,12 @@
 #include <assert.h> 
 #include <time.h>
 #include <algorithm>
-#include "hermes.h"
+#include "nifty.h"
 
 using namespace std;
 
 
-string Hermes::toString(string targetIP)
+string Nifty::toString(string targetIP)
 {
 	int throughID = ipToId.find(targetIP) == ipToId.end()? -1 : ipToId[targetIP];
 
@@ -33,7 +33,7 @@ string Hermes::toString(string targetIP)
 }
 
 
-void Hermes::print(string msg, bool forcePrint)
+void Nifty::print(string msg, bool forcePrint)
 {
 	if(verbose || forcePrint)
 		printf("%s\n", msg.c_str());
@@ -60,7 +60,7 @@ DistanceVectorEntry* distancVectorFromString(const char* message, int len)
 }
 
 
-Hermes::Hermes(std::string _myIp, std::string _myMac, unsigned int _pingingPeriod, unsigned int _destinationsCount,
+Nifty::Nifty(std::string _myIp, std::string _myMac, unsigned int _pingingPeriod, unsigned int _destinationsCount,
 	       std::string* _destinationIps, std::string* _destinationMacs, bool _verbose)
 {
 	myIp = _myIp;
@@ -76,21 +76,21 @@ Hermes::Hermes(std::string _myIp, std::string _myMac, unsigned int _pingingPerio
 }
 
 
-void Hermes::start()
+void Nifty::start()
 {
 	//A seperate thread to ping others.
-	pingingThread = std::thread (&Hermes::pingOthers, this, false);
+	pingingThread = std::thread (&Nifty::pingOthers, this, false);
 	receiveMessages();
 }
 
 
-Hermes::~Hermes()
+Nifty::~Nifty()
 {
 	delete[] distanceVector;
 }
 
 
-void Hermes::init()
+void Nifty::init()
 {
 	for (int i = 0; i < destinationsCount; ++i)
 	{
@@ -104,7 +104,7 @@ void Hermes::init()
 }
 
 
-void Hermes::nodeTimedOut(string ip)
+void Nifty::nodeTimedOut(string ip)
 {
 	// I already know that I cannot reach this one, do nothing. 
 	if(timedOutNodes.find(ip) != timedOutNodes.end() && timedOutNodes[ip])
@@ -123,7 +123,7 @@ void Hermes::nodeTimedOut(string ip)
 }
 
 
-void Hermes::checkTimeOuts()
+void Nifty::checkTimeOuts()
 {
 	for (int i = 0; i < destinationsCount; ++i)
 	{
@@ -139,7 +139,7 @@ void Hermes::checkTimeOuts()
 }
 
 
-void Hermes::pingOthers(bool onlyOnce)
+void Nifty::pingOthers(bool onlyOnce)
 {
 	struct sockaddr_in dest_addr;
 	dest_addr.sin_family = AF_INET;
@@ -177,7 +177,7 @@ void Hermes::pingOthers(bool onlyOnce)
 }
 
 
-bool Hermes::updateDV(const char* message, const char* sourceIP)
+bool Nifty::updateDV(const char* message, const char* sourceIP)
 {
 	bool updated = false;
 
@@ -226,7 +226,7 @@ bool Hermes::updateDV(const char* message, const char* sourceIP)
 }
 
 
-void Hermes::receiveMessages()
+void Nifty::receiveMessages()
 {
     int sockfd; 
     char buffer[BUFFSIZE]; 
@@ -278,7 +278,7 @@ void Hermes::receiveMessages()
 }
 
 
-const void Hermes::installRule(string rule)
+const void Nifty::installRule(string rule)
 {
 	print("Installing rule: " + rule);
 	system(rule.c_str());
@@ -298,7 +298,7 @@ const void Hermes::installRule(string rule)
  * 4 => CONTROLLER TRAFFIC
  * 5 => OTHER?	(not used.)
  */
-const void Hermes::updateOF()
+const void Nifty::updateOF()
 {
 	if(updating)
 		return;
@@ -350,13 +350,13 @@ const void Hermes::updateOF()
 }
 
 
-void Hermes::printDV()
+void Nifty::printDV()
 {
 	print("CurrentDV: " + toString());
 }
 
 
-vector<string> Hermes::getBridgeNodes()
+vector<string> Nifty::getBridgeNodes()
 {
 	vector<string> ret;
 

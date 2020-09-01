@@ -1,9 +1,9 @@
 /**
- * The main file of Hermes (contains driver code)
+ * The main file of Nifty (contains driver code)
  */
 
 #include <fstream>
-#include "hermes.h" 
+#include "nifty.h" 
 using namespace std;
 
 
@@ -122,8 +122,8 @@ int main(int argc, char** argv)
 	}
 	printArgs(myIp, myMac, pingingPeriod, destinationsCount, destinationIps, destinationMacs, verbose);
 
-	Hermes hermes(myIp, myMac, pingingPeriod, destinationsCount, destinationIps, destinationMacs, verbose);
-	hermes.start();
+	Nifty nifty(myIp, myMac, pingingPeriod, destinationsCount, destinationIps, destinationMacs, verbose);
+	nifty.start();
 	
 	return 0; 
 } 
