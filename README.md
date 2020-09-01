@@ -8,7 +8,7 @@ Nifty is a transparent communication layer that masks partial network partitions
 Setup
 -------
 
-In order to use Nifty, you need to have OVS installed already, with a bridge called br0. To do that, you can use the following commands (make sure to replace **$INTERFACE_NAME** (e.g., BASIL)and **$IP_ADDRESS** with their actual vales):
+In order to use Nifty, you need to have OVS installed already, with a bridge called br0. To do that, you can use the following commands (make sure to replace **$INTERFACE_NAME** (e.g., if0)and **$IP_ADDRESS** with their actual vales):
 
 ```bash
 $ sudo apt-get update  
