@@ -4,7 +4,7 @@
 . ../configuration
 
 # If your ssh need more options, you can set them in the $sshOptions variable (you can set identify file, port, ...)
-sshOptions=" -T -o StrictHostKeyChecking=no -i /proj/sds-PG0/mohammed/pnpdaemon/scripts/id_rsa "
+sshOptions=" -T "
 
 # Iterate through all the nodes, get their brdige IPs and MACs and save them (used to update nifty's nodes.conf)
 ips="";
@@ -38,7 +38,7 @@ do
 	
 	echo "Starting NIFTY on node $nodeIP (which has IP address: $ip, and MAC address: $mac)"
 	# Could need to either run the script as sudo or add sudo here to be able to deploy rules. (or have OVS not require sudo)
-	ssh -n $sshOptions $nodeIP "cd $NIFTY_HOME && sudo ./nifty -t 1 -i $ip -m $mac" &
+	ssh -n $sshOptions $nodeIP "cd $NIFTY_HOME && ./nifty -t 1 -i $ip -m $mac" &
  
 done < ./nodes.conf
 
