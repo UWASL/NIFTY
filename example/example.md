@@ -55,7 +55,7 @@ node4$ sudo ./deploy_partitioner.sh
 
 This will create a partition spacified in parts.conf
 
-6. **Test this** by logging into nodes 1, 2, and 3. You now should not be able to ping node 2 from node 3 (and vice versa) but should be able to ping nodes 2 and 3 from node 1.
+6. Test this by logging into nodes 1, 2, and 3. You now should not be able to ping node 2 from node 3 (and vice versa) but should be able to ping nodes 2 and 3 from node 1.
 
 Here is the output for testing from node2
 ```bash
@@ -95,7 +95,7 @@ node4$ sudo ./deploy_partitioner.sh
 
 This will create a partition spacified in parts.conf
 
-9. **Test this** by logging into nodes 1,2, and 3. You should still be able to ping all the nodes from all the nodes, despite the partition.
+9. Test this by logging into nodes 1,2, and 3. You should still be able to ping all the nodes from all the nodes, despite the partition.
 
 The following is the test from node2
 ```bash
