@@ -9,7 +9,7 @@ The main idea of this example is to show that using Nifty, we can mask partial p
 ### Setup
 To run this example, you will need 4 machines that are in the same network, say node1, node2, node3, node4. node4 will act as a controller of the experiment, while the other three nodes are the cluster in which we will deploy Nifty. Further, you need to have Nifty present in all of the nodes at the same location (the location should be the configuration file of the controller node (node4)), and Nifty should be compiled in all of them. You will also need to follow the steps in Nifty's setup and make sure that OVS is installed in nodes 1, 2, and 3.
 
-Example 1: A Partition without Nifty
+Example 1: A partition without Nifty
 -------
 
 In this example we will create a partition on a cluster. The cluster does not use Nifty.
@@ -74,7 +74,7 @@ node4$ sudo ./heal_partition.sh
 
 Now let's see how the this example is different when we have Nifty running in the system
 
-Example 2: A Partition while using Nifty
+Example 2: A partition while using Nifty
 -------
 
 We will repeate the previouse example on the cluster after deploying Nifty.
