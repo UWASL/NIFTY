@@ -23,6 +23,8 @@ modify the scripts in case any of these assumptions don't hold (if possible).
 NIFTY Deployment
 =======
 
+First, please set properly the path to the Nifty direcotry in the ```NIFTY_HOME``` veriable in the ```NIFTY/configuration``` file.
+
 In order for Nifty to run properly on a cluster, you will need to fill the config file nodes.conf. 
 nodes.conf should contain the IP addresses of all the nodes in the cluster. Each hostname (or IP address) needs to be on a single line. It's structured as follows:
 
