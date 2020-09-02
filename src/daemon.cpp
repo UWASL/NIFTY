@@ -13,7 +13,7 @@ using namespace std;
 void printUsage()
 {
 	printf("::USAGE::\n");
-	printf("./daemon -i [ip] -m [mac] [OPTIONS]\n\n");
+	printf("./nifty -i [ip] -m [mac] [OPTIONS]\n\n");
 	
 	printf("-i ip  , This machine's IP address, e.g., 192.168.1.5\n");
 	printf("-m mac , This machine's MAC address, e.g., f8:c9:7a:92:bb:a3\n");

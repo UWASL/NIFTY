@@ -30,9 +30,9 @@ void printUsage()
 {
 	printf("::USAGE::\n");
 	printf("./partitioner myMac [path]\n\n");
-	printf("If the tool called with no arguments, it heals the partial partition\n\n");
+	printf("If the tool is called with no arguments, it heals the partial partition\n\n");
 
-	printf("NOTE: The default path is parts.conf\n\n");
+	printf("NOTE: The default path is ./parts.conf\n\n");
 	printf("parts.conf structure\n");
 	printf("Line1 (count) g1MACs\n");
 	printf("Line2 (count) g2MACs\n");
