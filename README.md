@@ -34,7 +34,15 @@ There are two main excutables. Herems and Partitioner. Nifty is the fault tolera
 The ```deploy``` direcotry contains script for deploying Nifty on a cluster.
 
 
-Example
+Artifact Functional
 -------
 
 The ```example``` direcotry contains a simple example that demonstrates the functionality of Nifty.
+
+
+Results Reproduced
+-------
+
+The main claim we make with regard to our code, is that it can mask partial paritions without introducing high overhead.
+In our paper we show the negligable overhead Nifty has with HDFS, Kafka, RabbitMQ, and VoltDB.
+The direcotry ```Reproducing results``` contains our scripts to reproduce the results with two of the systems: HDFS and Kafka.
