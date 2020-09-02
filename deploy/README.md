@@ -13,7 +13,7 @@ Assumptions
 To run the scripts without any modifications, we have three assumptions. Below we list these assumptions and describe how to 
 modify the scripts in case any of these assumptions don't hold (if possible).
 
-1. We assume that Nifty is already present in all nodes in nodes.conf and its location is the same in all these nodes. The directory of Nifty can be configured through the configuration file (in the main Nifty directory, outside of the deployment folder). The file configuration currently only holds one variable called NIFTY_HOME and it gets parsed as part of all the scripts.
+1. We assume that Nifty is already present in all nodes in nodes.conf and its location is the same in all these nodes (e.g., in the user NFS home directory). The directory of Nifty can be configured through the configuration file (in the main Nifty directory, outside of the deployment folder). The file configuration currently only holds one variable called NIFTY_HOME and it gets parsed as part of all the scripts.
 
 2. We assume that the controller node (where you call the deployment scripts) can ssh into all the nodes in nodes.conf without any extra configuration or restrictions. Before running the experiment, please distirbute your ssh keys on the nodes and make sure ssh does not ask for creditials. Furthermore, if you need extra configuration to ssh into other nodes, you need to modify the scripts and change the variable called sshOptions that is present at the top of all scripts files.
 
