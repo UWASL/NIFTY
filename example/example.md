@@ -27,7 +27,7 @@ PING node3-link-0 (192.168.1.103) 56(84) bytes of data.
 3 packets transmitted, 3 received, 0% packet loss, time 2001ms
 ```
 
-2. From the controller node, modify nodes.conf in the deploy folder to include the hostnames (or IPs) of nodes 1,2, and 3.
+2. From the controller node, modify nodes.conf in the deploy folder to include the hostnames (or IPs) of nodes 1, 2, and 3.
 
 The file will look something like this
 ```
@@ -55,7 +55,7 @@ node1$ sudo ./deploy_partitioner.sh
 
 This will create a partition spacified in parts.conf
 
-6. **Test this** by logging into nodes 1,2, and 3. You now should not be able to ping node 2 from node 3 (and vice versa) but should be able to ping nodes 2 and 3 from node 1.
+6. **Test this** by logging into nodes 1, 2, and 3. You now should not be able to ping node 2 from node 3 (and vice versa) but should be able to ping nodes 2 and 3 from node 1.
 
 ```bash
 node2$ ping -c3 node3
