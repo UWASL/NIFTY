@@ -73,7 +73,7 @@ Simple run the helper script as follows:
 
 
 ```
-./print_MACS nodes.conf
+./print_macs nodes.conf
 ```
 
 This script will print the MAC address of every IP address found in nodes.conf
