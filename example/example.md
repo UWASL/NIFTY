@@ -1,7 +1,7 @@
 Nifty Example
 -------
 
-Below we describe an example that demonstrates how Nifty works and shows a simple use case of Nifty's functionality (this serves as Artifacts Functional).
+Below we describe an example that demonstrates how Nifty works and shows a simple use case of Nifty's functionality (i.e., Artifact Functionality).
 
 ### Overview
 The main idea of this example is to show that using Nifty, we can mask partial partitions in a local network. To demonstrate this, we will conduct a simple experiment where we use ping to show that Nifty infact does cover the partition without any modifications.
