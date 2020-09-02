@@ -30,9 +30,9 @@ nodes.conf should contain the hostname or IP address of all the nodes in the clu
 
 Example file
 ```
-node1
-node2
-node3
+192.168.1.101
+192.168.1.102
+192.168.1.103
 ```
 
 To deply NIFTY on the nodes in the nodes.conf just simple call the deployment script
@@ -52,13 +52,13 @@ First line is an integer that represents the number of nodes in the first group 
 
 ```
 1
-MAC1
+08:00:27:39:87:e1
 2
-MAC2
-MAC3
+08:00:27:39:87:e2
+08:00:27:39:87:e3
 ```
 
-The example parts.conf above specifies a partition in which MAC1 is on one side and the two nodes with macs (MAC2 and MAC3) are on another. Other nodes that are not listed in parts.conf are not affected by the partition, i.e., can access all other nodes. 
+The example parts.conf above specifies a partition in which MAC1 (08:00:27:39:87:e1) is on one side and the two nodes with macs (MAC2 = 08:00:27:39:87:e2 and MAC3 = 08:00:27:39:87:e3) are on another. Other nodes that are not listed in parts.conf are not affected by the partition, i.e., can access all other nodes. 
 To help you in configuring parts.conf, we include a helper script (detailed bellow) to discover the MAC addresses in a cluster.
 
 Once you configure parts.conf you can run the partitioner to create the partition.
