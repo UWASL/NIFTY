@@ -172,7 +172,7 @@ void Nifty::pingOthers(bool onlyOnce)
 			    			   sizeof(dest_addr)); 
 			close(dest_sockfd); 
 		}
-	    	std::this_thread::sleep_for(std::chrono::seconds(pingingPeriod));
+	    	std::this_thread::sleep_for(std::chrono::milliseconds(pingingPeriod));
 	}while(!onlyOnce);
 }
 
