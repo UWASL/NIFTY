@@ -69,11 +69,12 @@ Helper Scripts
 
 To configure parts.conf you need to know the MAC addresses of all the nodes in the cluster. We include a simple script to print out all the MAC addresses.
 
-Simple run the helper script as follows:
+Run the helper script as follows:
 
 
 ```
 ./print_macs nodes.conf
 ```
+Where nodes.conf includs a list of IP addresses.
 
 This script will print the MAC address of every IP address found in nodes.conf
