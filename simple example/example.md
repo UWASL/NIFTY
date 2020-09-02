@@ -7,7 +7,7 @@ Below we describe an example that demonstrates how Nifty works and shows a simpl
 The main idea of this example is to show that using Nifty, we can mask partial partitions in a local network. To demonstrate this, we will conduct a simple experiment where we use ping to show that Nifty infact does cover the partition without any modifications.
 
 ### Setup
-To run this example, you will need 4 machines that are in the same network, say node1, node2, node3, node4. node4 will act as a controller of the experiment, while the other three nodes are the cluster in which we will deploy Nifty. Further, you need to have Nifty present in all of the nodes at the same location (the location should be the configuration file of the controller node (node4)), and Nifty should be compiled in all of them. You will also need to follow the steps in Nifty's setup and make sure that OVS is installed in nodes 1, 2, and 3.
+To run this example, you will need 4 machines that are in the same network, say node1, node2, node3, node4. node4 will act as a controller of the experiment, while the other three nodes are the cluster in which we will deploy Nifty. Further, you need to have Nifty present in all of the nodes at the same location (the location specified in the configuration file of the controller node (node4)), and Nifty should be compiled in all of them. You will also need to follow the steps in Nifty's setup and make sure that OVS is installed in nodes 1, 2, and 3.
 
 Example 1: A partition without Nifty
 -------
@@ -47,13 +47,13 @@ node3_MAC
 
 This effectively defines a partition between node2 and node3, while node1 can communicate with all the nodes.
 
-4. From the controler node (node4) run the script ./deploy_partitioner.sh
+4. From the controller node (node4) run the script ./deploy_partitioner.sh
 
 ```bash
 node4$ sudo ./deploy_partitioner.sh
 ```
 
-This will create a partition spacified in parts.conf
+This will create a partition specified in parts.conf
 
 6. Test this by logging into nodes 1, 2, and 3. You now should not be able to ping node 2 from node 3 (and vice versa) but should be able to ping nodes 2 and 3 from node 1.
 
@@ -66,7 +66,7 @@ PING node3-link-0 (192.168.1.103) 56(84) bytes of data.
 3 packets transmitted, 0 received, 100% packet loss, time 2015ms
 ```
 
-7. Heal the parition using the heal script on node4
+7. Heal the partition using the heal script on node4
 
 ```bash
 node4$ sudo ./heal_partition.sh
@@ -77,23 +77,23 @@ Now let's see how the this example is different when we have Nifty running in th
 Example 2: A partition while using Nifty
 -------
 
-We will repeate the previouse example on the cluster after deploying Nifty.
+We will repeat the previous example on the cluster after deploying Nifty.
 
 Redo steps 1 and 2 from example 1 above.
 
-1. Deploy Nifty using the deployment script found in the ```deploy``` directory. Run the deploy script on the controler node.
+1. Deploy Nifty using the deployment script found in the ```deploy``` directory. Run the deploy script on the controller node.
 
 ```bash
 node4$ sudo ./deploy_nifty.sh
 ```
 
-4. Now, on node4 run the script to create a parition using ./deploy_partitioner.sh
+4. Now, on node4 run the script to create a partition using ./deploy_partitioner.sh
 
 ```bash
 node4$ sudo ./deploy_partitioner.sh
 ```
 
-This will create a partition spacified in parts.conf
+This will create a partition specified in parts.conf
 
 9. Test this by logging into nodes 1,2, and 3. You should still be able to ping all the nodes from all the nodes, despite the partition.
 
@@ -110,7 +110,7 @@ PING node3-link-0 (192.168.1.103) 56(84) bytes of data.
 rtt min/avg/max/mdev = 0.301/0.331/0.360/0.032 ms
 ```
 
-The ping works and node2 and node3 can communicate inspite of the parition. That is because Nifty creates alternative routes in the network to mask the partition.
+The ping works and node2 and node3 can communicate in spite of the partition. That is because Nifty creates alternative routes in the network to mask the partition.
 
 
 

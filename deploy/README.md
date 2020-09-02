@@ -15,7 +15,7 @@ modify the scripts in case any of these assumptions don't hold (if possible).
 
 1. We assume that Nifty is already present in all nodes in nodes.conf and its location is the same in all these nodes (e.g., in the user NFS home directory). The directory of Nifty can be configured through the configuration file (in the main Nifty directory, outside of the deployment folder). The file configuration currently only holds one variable called NIFTY_HOME and it gets parsed as part of all the scripts.
 
-2. We assume that the controller node (where you call the deployment scripts) can ssh into all the nodes in nodes.conf without any extra configuration or restrictions. Before running the experiment, please distirbute your ssh keys on the nodes and make sure ssh does not ask for creditials. Furthermore, if you need extra configuration to ssh into other nodes, you need to modify the scripts and change the variable called sshOptions that is present at the top of all scripts files.
+2. We assume that the controller node (where you call the deployment scripts) can ssh into all the nodes in nodes.conf without any extra configuration or restrictions. Before running the experiment, please distribute your ssh keys on the nodes and make sure ssh does not ask for credentials. Furthermore, if you need extra configuration to ssh into other nodes, you need to modify the scripts and change the variable called sshOptions that is present at the top of all scripts files.
 
 3. We assume that you do not need sudo privileges to install openflow rules in OVS of the nodes you ssh into. If this doesn't hold, you can change the lines in the scripts that call Nifty or Partitioner in other nodes (the scripts have a comment that makes this change easy)
 
@@ -23,7 +23,7 @@ modify the scripts in case any of these assumptions don't hold (if possible).
 NIFTY Deployment
 =======
 
-First, please set properly the path to the Nifty direcotry in the ```NIFTY_HOME``` veriable in the ```NIFTY/configuration``` file.
+First, please set properly the path to the Nifty directory in the ```NIFTY_HOME``` variable in the ```NIFTY/configuration``` file.
 
 In order for Nifty to run properly on a cluster, you will need to fill the config file nodes.conf. 
 nodes.conf should contain the hostname or IP address of all the nodes in the cluster. Each hostname (or IP address) needs to be on a single line. 
@@ -45,7 +45,7 @@ To deply NIFTY on the nodes in the nodes.conf just simple call the deployment sc
 Partitioner Deployment
 =======
 
-To use Partitioner, you need a config the parts.conf file which specifies the parition. 
+To use Partitioner, you need a config the parts.conf file which specifies the partition. 
 
 The structure of the config file is as follows:
 First line is an integer that represents the number of nodes in the first group (n). The next n lines list the MAC addresses of these nodes. Next line is an integer the represents the number of nodes in the second group (m). The next m lines list the MAC addresses of these nodes. e.g.,
@@ -84,6 +84,6 @@ Run the helper script as follows:
 ```
 ./print_macs nodes.conf
 ```
-Where nodes.conf includs a list of hostnames or IP addresses.
+Where nodes.conf includes a list of hostnames or IP addresses.
 
 This script will print the MAC address of every IP address found in nodes.conf

@@ -29,20 +29,20 @@ to compile the code and generate the excutables.
 
 Usage
 -------
-There are two main excutables. Herems and Partitioner. Nifty is the fault tolerance layer that protects against partial network partitions, whereas Partitioner is a simple tool that can be used to inject partial partitions (for testing purposes). Both of these requre OVS and assume the bridge is called br0 (see setup above).
+There are two main executables. Nifty and Partitioner. Nifty is the fault tolerance layer that protects against partial network partitions, whereas Partitioner is a simple tool that can be used to inject partial partitions (for testing purposes). Both of these require OVS and assume the bridge is called br0 (see setup above).
 
-The ```deploy``` direcotry contains script for deploying Nifty on a cluster.
+The ```deploy``` directory contains scripts for deploying Nifty on a cluster.
 
 
 Artifact Functional
 -------
 
-The ```example``` direcotry contains a simple example that demonstrates the functionality of Nifty.
+The ```example``` directory contains a simple example that demonstrates the functionality of Nifty.
 
 
 Results Reproduced
 -------
 
-The main claim we make with regard to our code, is that it can mask partial paritions without introducing high overhead.
-In our paper we show the negligable overhead Nifty has with HDFS, Kafka, RabbitMQ, and VoltDB.
-The direcotry ```Reproducing results``` contains our scripts to reproduce the results with two of the systems: HDFS and Kafka.
+The main claim we make with regard to our code is that it can mask partial partitions without introducing high overhead.
+In our paper we show the negligible overhead Nifty has with HDFS, Kafka, RabbitMQ, and VoltDB.
+The directory ```Reproducing results``` contains our scripts to reproduce the results with two of the systems: HDFS and Kafka.
