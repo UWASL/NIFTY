@@ -41,7 +41,6 @@ def printResults(producersProcesses):
             print("{}: {}".format(index, e))
     print ("-------------------")
     print("total: {:.2f} messages/sec".format(total))
-    print ("###################")
 
 
 
