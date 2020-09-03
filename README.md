@@ -24,7 +24,7 @@ After that, you can just use
 ```bash
 $ make
 ```
-to compile the code and generate the excutables.
+to compile the code and generate the executables.
 
 
 Usage
