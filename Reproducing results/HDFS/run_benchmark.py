@@ -72,15 +72,25 @@ while x > 1:
 	time.sleep(10)
 
 
+
+
 print("Client's Write Operations Starting...")
 threads = []
 for i in range(num_of_clients):
-	threads.append(threading.Thread(target=runBenchmarkWriteClient, args=[nodes[i%num_of_client_nodes], i]))
+	threads.append(threading.Thread(target=runBenchmarkWriteClient, args=[nodes[config.num_of_cluster_nodes + (i % num_of_client_nodes)], i]))
 
 for t in threads:
 	t.start()
 	
-time.sleep(20)
+
+# Polling for the results to be ready before joining threads
+for c in range(num_of_clients):
+        done = False
+	while done == False:	
+		stdin, stdout, stderr = nodes[config.num_of_cluster_nodes + c % num_of_client_nodes].exec_command("cat " + config.HADOOP_HOME + "/temp_output_write_" + str(c) + ".txt | grep Throughput")
+		output_c = stdout.read()
+		done = ('Throughput' in output_c)
+		time.sleep(5)
 
 for t in threads:
 	t.join()
@@ -92,12 +102,19 @@ print("Client's Write Done")
 print("Client's Read Operation Starting...")
 threads = []
 for i in range(num_of_clients):
-	threads.append(threading.Thread(target=runBenchmarkReadClient, args=[nodes[i%num_of_client_nodes], i]))
+	threads.append(threading.Thread(target=runBenchmarkReadClient, args=[nodes[config.num_of_cluster_nodes + (i % num_of_client_nodes)], i]))
 
 for t in threads:
 	t.start()
 
-time.sleep(20)
+# Polling for the results to be ready before joining threads
+for c in range(num_of_clients):
+        done = False
+        while done == False:
+                stdin, stdout, stderr = nodes[config.num_of_cluster_nodes + c % num_of_client_nodes].exec_command("cat " + config.HADOOP_HOME + "/temp_output_read_" + str(c) + ".txt | grep Throughput")
+                output_c = stdout.read()
+                done = ('Throughput' in output_c)
+                time.sleep(5)
 
 for t in threads:
 	t.join()
@@ -128,4 +145,4 @@ for c in range(num_of_clients):
                 if "Throughput" in line:
 	                throughput = throughput + float(line.split(" ")[-1])
         nodes[config.num_of_cluster_nodes + c % num_of_client_nodes].exec_command("rm " + config.HADOOP_HOME + "/temp_output_read_" + str(c) + ".txt")
-print("Total Read Throughput: " + str(throughput)) 
+print("Total Read Throughput: " + str(throughput))
