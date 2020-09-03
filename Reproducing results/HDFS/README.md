@@ -12,7 +12,7 @@ $ pip install paramiko
 
 Running the Experiment
 -------
-1- Set variables in the config.py file: HADOOP_HOME, the ips of all nodes (cluster nodes and nodes that will host the clients), and size of HDFS cluster.
+1- Set variables in the config.py file: HADOOP_HOME (making sure that this directory is where hadoop is installed and is the same for all nodes in the experiment), the ips of all nodes (cluster nodes and nodes that will host the clients), and size of HDFS cluster.
 
 2- From the controller node, which could be a separate node or part of the cluster, start HDFS. The start-hdfs.py script can help, it will start NameNode on the first ip in the list (in config.py), and enough DataNodes to satify the set cluster size.
 
