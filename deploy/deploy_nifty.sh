@@ -38,7 +38,7 @@ do
 	
 	echo "Starting NIFTY on node $nodeIP (which has IP address: $ip, and MAC address: $mac)"
 	# Could need to either run the script as sudo or add sudo here to be able to deploy rules. (or have OVS not require sudo)
-	ssh -n $sshOptions $nodeIP "cd $NIFTY_HOME && ./nifty -t 100 -i $ip -m $mac -c nifty_nodes.conf" &
+	ssh -n $sshOptions $nodeIP "cd $NIFTY_HOME && ./nifty -t 300 -i $ip -m $mac -c nifty_nodes.conf" &
  
 done < ./nodes.conf
 
