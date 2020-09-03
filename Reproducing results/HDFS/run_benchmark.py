@@ -111,24 +111,21 @@ print("Client's Read Done")
 
 throughput = 0
 for c in range(num_of_clients):
-	result = subprocess.check_output(("tail " + config.HADOOP_HOME + "/temp_output_write_" + str(c) + ".txt").split(" "))
-	lines = result.splitlines()
+	stdin, stdout, stderr = nodes[config.num_of_cluster_nodes + c % num_of_client_nodes].exec_command("cat " + config.HADOOP_HOME + "/temp_output_write_" + str(c) + ".txt")
+	lines = stdout.read().splitlines()
 	for line in lines:
 		if "Throughput" in line:
 			throughput = throughput + float(line.split(" ")[-1])
-
+	nodes[config.num_of_cluster_nodes + c % num_of_client_nodes].exec_command("rm " + config.HADOOP_HOME + "/temp_output_write_" + str(c) + ".txt")
 print("Total Write Throughput: " + str(throughput))
 
 
 throughput = 0
 for c in range(num_of_clients):
-	result = subprocess.check_output(("tail " + config.HADOOP_HOME + "/temp_output_read_" + str(c) + ".txt").split(" "))
-        lines = result.splitlines()
+	stdin, stdout, stderr = nodes[config.num_of_cluster_nodes + c % num_of_client_nodes].exec_command("cat " + config.HADOOP_HOME + "/temp_output_read_" + str(c) + ".txt")
+        lines = stdout.read().splitlines()
         for line in lines:
                 if "Throughput" in line:
 	                throughput = throughput + float(line.split(" ")[-1])
-
-print("Total Read Throughput: " + str(throughput))
-
-              
-os.system("rm " + config.HADOOP_HOME + "/temp_output_*.txt")
+        nodes[config.num_of_cluster_nodes + c % num_of_client_nodes].exec_command("rm " + config.HADOOP_HOME + "/temp_output_read_" + str(c) + ".txt")
+print("Total Read Throughput: " + str(throughput)) 
