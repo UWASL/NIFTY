@@ -37,7 +37,7 @@ The ```deploy``` directory contains scripts for deploying Nifty on a cluster.
 Artifact Functional
 -------
 
-The ```example``` directory contains a simple example that demonstrates the functionality of Nifty.
+The ```simple example``` directory contains a simple example that demonstrates the functionality of Nifty.
 
 
 Results Reproduced
