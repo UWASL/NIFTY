@@ -15,12 +15,14 @@ def parseResult(outputStr):
     except Exception as e:
         print(e)
 
-if (len(sys.argv) < 3):
+if (len(sys.argv) < 4):
     print ("::USAGE::")
     print ("python ./run_exp.py min_num_clients max_num_clients step")
+    print ("--------------------------------------------------------")
     print ("this script runs multiple experiments by increasing the ")
     print ("number of clients from min_num_clients to max_num_clients ")
     print ("by the value of step in each iteration")
+    print ("--------------------------------------------------------")
     sys.exit()
 
 cmdHelper = cmd_helper.CmdHelper()

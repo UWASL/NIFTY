@@ -5,6 +5,7 @@ This script receives one command arguments: number of producers
 '''
 
 import sys
+import threading
 import os 
 import time
 import config
@@ -44,14 +45,34 @@ def printResults(producersProcesses):
 
 
 
-# create a topic for each producer. 
-def createTopic():
-    for i in range(PRODUCERS_COUNT):
-        cmd = config.KAFKA_CREATE_TOPIC_BIN + " --create --topic topic-{} --zookeeper {}:{} --replication-factor {} --partitions 3".format(i, config.ZOOKEEPER_ADDRESS, config.ZOOKEEPER_PORT, config.REPLICATION_FACTOR)
-        cmdHelper.executeCmdRemotely(cmd, config.BROKER_NODES[0], True)
+# create a single topic
+def createSingleTopic(topicName):
+    cmd = config.KAFKA_CREATE_TOPIC_BIN + " --create --topic {} --zookeeper {}:{} --replication-factor {} --partitions 3".format(topicName,config.ZOOKEEPER_ADDRESS, config.ZOOKEEPER_PORT, config.REPLICATION_FACTOR)
+    cmdHelper.executeCmdRemotely(cmd, config.BROKER_NODES[0], True, TMP_DIR + "null")
         
+
+# create a topic for each producer. 
+def createTopics():
+    threads = []
+    for i in range(PRODUCERS_COUNT):
+	    threads.append(threading.Thread(target=createSingleTopic, args=["topic-{}".format(i)]))
+
+    for t in threads:
+	    t.start()
+
+    for t in threads:
+	    t.join()    
+
+
+def startSingleProducer(cmd, nodeIp, producersProcesses):
+    [p, err] = cmdHelper.executeCmdRemotely(cmd, nodeIp, False)
+    producersProcesses.append(p)
+
 # start the producers and collect the results
 def startProducers():
+    # thread array to store threads use run clients in parallel
+    threads = []
+    
     # convert the brokers ip addresses to producers format
     brokersAddressesStr = []
     for index, node in enumerate(config.BROKER_NODES):
@@ -69,9 +90,14 @@ def startProducers():
     for i in range(PRODUCERS_COUNT):
         path = config.KAFKA_DATA_DIR + "producer{}.properties".format(i)
         cmd = config.KAFKA_PRODUCER_TEST_BIN + "--topic topic-{} --record-size {} --throughput -1 --num-records {} --producer.config {}".format(i, config.MESSAGE_SIZE, config.MESSAGES_COUNT, path)
-        [p, err] = cmdHelper.executeCmdRemotely(cmd, config.CLIENT_NODES[i%len(config.CLIENT_NODES)], False)
-        producersProcesses.append(p)
+        threads.append(threading.Thread(target=startSingleProducer, args=[cmd, config.CLIENT_NODES[i%len(config.CLIENT_NODES)], producersProcesses]))
+
+    for t in threads:
+	    t.start()
     
+    for t in threads:
+	    t.join() 
+
     # wait until producers finish
     for p in producersProcesses:
         try:
@@ -88,5 +114,5 @@ TMP_DIR = os.getcwd() + "/tmp/"
 cmd = "mkdir -p {}".format(TMP_DIR)
 cmdHelper.executeCmdBlocking(cmd)
 
-createTopic()
+createTopics()
 startProducers()
