@@ -45,4 +45,4 @@ Results Reproduced
 
 The main claim we make with regard to our code is that it can mask partial partitions without introducing high overhead.
 In our paper we show the negligible overhead Nifty has with HDFS, Kafka, RabbitMQ, and VoltDB.
-The directory ```Reproducing results``` contains our scripts to reproduce the results with two of the systems: HDFS and Kafka.
+The directory ```reproducing_results``` contains our scripts to reproduce the results with two of the systems: HDFS and Kafka.
