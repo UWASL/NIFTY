@@ -17,24 +17,44 @@ While most environments already have pip, you may need to install it manually as
 
 Running the Experiment
 -------
-1- Set variables in the config.py file: 
+1- Start by setting HDFS parameteres. In our experiments, we used default configurations for everything, except for setting paths for directories for hadoop to use in $HADOOP_HOME/etc/hadoop/hdfs-site.xml. The files should have the following two properties at least, with your desired [HADOOP_STORE_DIR] that exists on all cluster nodes:
+
+```xml
+     <property>
+            <name>dfs.namenode.name.dir</name>
+            <value>file:[HADOOP_STORE_DIR]/hadoop_store/hdfs/namenode</value>
+     </property>
+     <property>
+            <name>dfs.datanode.data.dir</name>
+            <value>file:[HADOOP_STORE_DIR]/hadoop_store/hdfs/datanode</value>
+     </property>
+```
+
+2- Set variables in the config.py file: 
 * HADOOP_HOME: making sure that this directory is where hadoop is installed and is the same for all nodes in the experiment
+* HADOOP_STORE: this should be set to the [HADOOP_STORE_DIR] mentioned in step 1.
 * The IP addresses of all nodes in the experiment, this includes the HDFS cluster nodes (NameNodes and DataNodes) and the nodes which will run the benchmark client.
 * The size of the HDFS cluster, which will be split into 1 NameNode and the rest will be DataNodes.
 
-2- From the controller node, which could be a separate node or part of the cluster, start HDFS. You can use:
+3- From the controller node, which could be a separate node or part of the cluster, start HDFS. You can use:
 ```bash
 $ python start_hdfs.py
 ```
 The script will start a NameNode on the first IP address machine in the list (in config.py), and enough DataNodes to satify the set cluster size.
 
-3- If you're testing with Nifty, now would be the time to start it using deploy/deploy-nifty.sh. You can learn more on how to start Nifty in the Readme of the deploy directory.
+4- If you're testing with Nifty, now would be the time to start it using deploy/deploy-nifty.sh. You can learn more on how to start Nifty in the Readme of the deploy directory.
 
-4- Run the HDFS TestDFSIO benchmark. This can be done by:
+5- Run the HDFS TestDFSIO benchmark. This can be done by:
 ```bash
 $ python run_benchmark.py <number_of_clients>
 ```
 Clients will be distributed onto the machines that are in the experiment but were not used in the HDFS cluster. The client will run in parallel, starting with a clean up, then writing to the HDFS cluster, then reading the same files they wrote. The run_benchmark script then returns the total throughput of the cluster in the write period and in the read period.
+
+To recreate results faster, you might want to use the following command:
+```bash
+$ python run_exp.py <init_num_of_clients> <final_num_of_clients> <step_size>
+```
+This command will create a CSV file called results.csv with the Read and Write throughputs across different client counts.
 
 
 Reproducing Results
