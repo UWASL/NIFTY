@@ -76,7 +76,7 @@ class Nifty
 {
 	unsigned int destinationsCount;		// number of nodes in the system (-1)
 	unsigned int pingingPeriod;		// the period for heartbeat messages to check reachability
-	unsigned int timeoutPeriod = 30;	// the timeout period: nodes is considered unreachable after that time
+	unsigned int timeoutPeriod = 1;	// the timeout period: nodes is considered unreachable after that time
 	bool verbose;				// verbose mode, more output, good for debugging
 	std::string *destinationIps;		// list of ips of the other nodes in the system
 	std::string *destinationMacs;		// list of macs of the other nodes in the system
