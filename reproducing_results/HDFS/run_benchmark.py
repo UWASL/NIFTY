@@ -17,7 +17,6 @@ num_of_client_nodes = num_of_nodes - config.num_of_cluster_nodes
 
 
 # parameters for SSH paramiko
-username = "b2alkhat"
 port = 22
 
 
@@ -30,7 +29,7 @@ try:
 		print(ip)
 		node = paramiko.SSHClient()
 		node.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-		node.connect(ip, port=port, username=username)
+		node.connect(ip, port=port, username=config.SSH_USERNAME)
 		print("Trying to connect to node with address: " + ip)
 		nodes.append(node)
 except:
@@ -41,15 +40,15 @@ except:
 
 
 def runBenchmarkReadClient(node, cid):
-	command = "cd " + config.HADOOP_HOME +"; ./bin/yarn jar share/hadoop/mapreduce/hadoop-mapreduce-client-jobclient-3.3.0-tests.jar TestDFSIO -Dtest.build.data=/benchmark/c" + str(cid) + " -Dmapred.output.compress=false -read  -nrFiles 1 -fileSize 1000 &> " + config.HADOOP_HOME + "/temp_output_read_" + str(cid) + ".txt"
+	command = "cd " + config.HADOOP_HOME +"; ./bin/yarn jar share/hadoop/mapreduce/hadoop-mapreduce-client-jobclient-" + config.HADOOP_VERSION + "-tests.jar TestDFSIO -Dtest.build.data=/benchmark/c" + str(cid) + " -Dmapred.output.compress=false -read  -nrFiles 1 -fileSize 1000 &> " + config.HADOOP_HOME + "/temp_output_read_" + str(cid) + ".txt"
 	node.exec_command(command)
 
 def runBenchmarkWriteClient(node, cid):
-	command = "cd " + config.HADOOP_HOME +"; ./bin/yarn jar share/hadoop/mapreduce/hadoop-mapreduce-client-jobclient-3.3.0-tests.jar TestDFSIO -Dtest.build.data=/benchmark/c" + str(cid) + " -Dmapred.output.compress=false -write  -nrFiles 1 -fileSize 1000 &> " + config.HADOOP_HOME + "/temp_output_write_" + str(cid) + ".txt"
+	command = "cd " + config.HADOOP_HOME +"; ./bin/yarn jar share/hadoop/mapreduce/hadoop-mapreduce-client-jobclient-" + config.HADOOP_VERSION + "-tests.jar TestDFSIO -Dtest.build.data=/benchmark/c" + str(cid) + " -Dmapred.output.compress=false -write  -nrFiles 1 -fileSize 1000 &> " + config.HADOOP_HOME + "/temp_output_write_" + str(cid) + ".txt"
 	node.exec_command(command)
 
 def runBenchmarkCleanup(node):
-	node.exec_command("cd " + config.HADOOP_HOME + "; ./bin/yarn jar share/hadoop/mapreduce/hadoop-mapreduce-client-jobclient-3.3.0-tests.jar TestDFSIO -Dtest.build.data=/benchmark -Dmapred.output.compress=false -clean")
+	node.exec_command("cd " + config.HADOOP_HOME + "; ./bin/yarn jar share/hadoop/mapreduce/hadoop-mapreduce-client-jobclient-" + config.HADOOP_VERSION + "-tests.jar TestDFSIO -Dtest.build.data=/benchmark -Dmapred.output.compress=false -clean")
 	
 
 

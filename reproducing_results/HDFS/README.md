@@ -17,17 +17,34 @@ While most environments already have pip, you may need to install it manually as
 
 Running the Experiment
 -------
-1- Start by setting HDFS parameteres. In our experiments, we used default configurations for everything, except for setting paths for directories for hadoop to use in $HADOOP_HOME/etc/hadoop/hdfs-site.xml. The files should have the following two properties at least, with your desired [HADOOP_STORE_DIR] that exists on all cluster nodes:
+1- Start by setting HDFS parameteres. In our experiments, we used default configurations for most parameters. You'll need to edit the following file on all cluster nodes in order to run the experiment:
+
+* In $HADOOP_HOME/etc/hadoop/hdfs-site.xml: Add the following two properties, with your desired [HADOOP_STORE_DIR] that exists on all cluster nodes:
 
 ```xml
      <property>
             <name>dfs.namenode.name.dir</name>
-            <value>file:[HADOOP_STORE_DIR]/hadoop_store/hdfs/namenode</value>
+            <value>file:[HADOOP_STORE_DIR]/hdfs/namenode</value>
      </property>
      <property>
             <name>dfs.datanode.data.dir</name>
-            <value>file:[HADOOP_STORE_DIR]/hadoop_store/hdfs/datanode</value>
+            <value>file:[HADOOP_STORE_DIR]/hdfs/datanode</value>
      </property>
+```
+
+* In $HADOOP_HOME/etc/hadoop/hadoop-env.sh, add your JAVA_HOME directory. It should look something like this:
+```bash
+# The java implementation to use. By default, this environment
+# variable is REQUIRED on ALL platforms except OS X!
+export JAVA_HOME='/usr/lib/jvm/java-8-openjdk-amd64'
+```
+
+* In $HADOOP_HOME/etc/hadoop/core-site.xml, you must specify the address of your NameNode to allow the DataNodes to reach it. It should have a property like this:
+```xml
+    <property>
+        <name>fs.defaultFS</name>
+        <value>hdfs://<node1_ip>:9000</value>
+    </property>
 ```
 
 2- Set variables in the config.py file: 
@@ -38,7 +55,7 @@ Running the Experiment
 
 3- From the controller node, which could be a separate node or part of the cluster, start HDFS. You can use:
 ```bash
-$ python start_hdfs.py
+$ python deploy_hdfs.py
 ```
 The script will start a NameNode on the first IP address machine in the list (in config.py), and enough DataNodes to satify the set cluster size.
 

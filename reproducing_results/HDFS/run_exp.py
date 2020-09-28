@@ -14,7 +14,6 @@ from datetime import datetime
 nodes = []
 
 # parameters for SSH paramiko
-username = "b2alkhat"
 port = 22
 
 
@@ -24,7 +23,7 @@ try:
 		print(ip)
 		node = paramiko.SSHClient()
 		node.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-		node.connect(ip, port=port, username=username)
+		node.connect(ip, port=port, username=config.SSH_USERNAME)
 		print("Trying to connect to node with address: " + ip)
 		nodes.append(node)
 except:
