@@ -4,16 +4,21 @@ The scripts in this directory can be used to reproduce HDFS results that are pre
 
 Prerequesets
 -------
-1- Install Hadoop 3.3.0 from the website: https://downloads.apache.org/hadoop/common/hadoop-3.3.0/.
+1- Install Java.
+```bash
+$ apt-get install default-jdk -y
+```
 
-2- Install the Paramiko library for Python SSH, the easiest way is using pip.
+2- Install Hadoop 3.3.0 from the website: https://downloads.apache.org/hadoop/common/hadoop-3.3.0/.
+
+3- Install the Paramiko library for Python SSH, the easiest way is using pip.
 ```bash
 $ pip install paramiko
 ```
 While most environments already have pip, you may need to install it manually as described in https://github.com/pypa/get-pip.
 
 
-3- We assume that the machines in the experiment can SSH into each other, or at least one controller node can SSH into all machines. This could call for setting up some keys for SSH.
+4- We assume that the machines in the experiment can SSH into each other, or at least one controller node can SSH into all machines. This could call for setting up some keys for SSH.
 
 Running the Experiment
 -------
