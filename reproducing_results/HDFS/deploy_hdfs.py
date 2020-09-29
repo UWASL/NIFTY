@@ -9,7 +9,6 @@ import threading
 import os
 import subprocess
 from multiprocessing import Pool
-import statistics 
 from datetime import datetime
 
 nodes = []

@@ -133,7 +133,7 @@ for c in range(num_of_clients):
 		if "Throughput" in line:
 			throughput = throughput + float(line.split(" ")[-1])
 	nodes[config.num_of_cluster_nodes + c % num_of_client_nodes].exec_command("rm " + config.HADOOP_HOME + "/temp_output_write_" + str(c) + ".txt")
-print("Total Write Throughput: " + str(throughput))
+print("Total Write Throughput: " + str(throughput) + "MB/sec")
 
 
 throughput = 0
@@ -144,4 +144,4 @@ for c in range(num_of_clients):
                 if "Throughput" in line:
 	                throughput = throughput + float(line.split(" ")[-1])
         nodes[config.num_of_cluster_nodes + c % num_of_client_nodes].exec_command("rm " + config.HADOOP_HOME + "/temp_output_read_" + str(c) + ".txt")
-print("Total Read Throughput: " + str(throughput))
+print("Total Read Throughput: " + str(throughput) + "MB/sec")
