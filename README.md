@@ -34,15 +34,8 @@ There are two main executables. Nifty and Partitioner. Nifty is the fault tolera
 The ```deploy``` directory contains scripts for deploying Nifty on a cluster.
 
 
-Artifact Functional
+Examples
 -------
 
-The ```simple example``` directory contains a simple example that demonstrates the functionality of Nifty.
-
-
-Results Reproduced
--------
-
-The main claim we make with regard to our code is that it can mask partial partitions without introducing high overhead.
-In our paper we show the negligible overhead Nifty has with HDFS, Kafka, RabbitMQ, and VoltDB.
-The directory ```reproducing_results``` contains our scripts to reproduce the results with two of the systems: HDFS and Kafka.
+The ```examples``` direcotry contains examples of using Nifty with diffirent systems. 
+The ```examples/simple example``` directory contains a simple example that demonstrates the functionality of Nifty.
