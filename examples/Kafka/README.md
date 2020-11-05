@@ -52,4 +52,4 @@ python3 run_exp.py min_num_clients max_num_clients step
 
 Experimenting with Nifty
 -------
-In order to compare the performance of Kafka with and without Nifty, you must run the same experiments with and without Nifty and compare the results. Please refer to the `deploy` folder to see how to deploy Nifty on multiple nodes. According to our experimental results, Nifty does not add noticeable overhead. 
+In order to compare the performance of Kafka with and without Nifty, you must run the same experiments with and without Nifty and compare the results. Please refer to the `deploy` folder to see how to deploy Nifty on multiple nodes.
