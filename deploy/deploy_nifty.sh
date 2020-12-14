@@ -16,7 +16,7 @@ do
 		continue;
 	fi
   	#ssh into the node and get its IP and MAC.
-  	ip=$(ssh -n $sshOptions $nodeIP /sbin/ifconfig br0 | grep 'inet addr' | cut -d: -f2 | awk '{print $1}')
+  	ip=$(ssh -n $sshOptions $nodeIP ip addr show br0 | grep 'inet ' | cut -f2 | awk '{print $2}' | rev | cut -c4- | rev)
   	mac=$(ssh -n $sshOptions $nodeIP cat /sys/class/net/br0/address)
 
 	ips="${ips}${ip}\n"
@@ -32,7 +32,7 @@ do
 		continue;
 	fi
   	#ssh into the node and get its IP and MAC.
-  	ip=$(ssh -n $sshOptions $nodeIP /sbin/ifconfig br0 | grep 'inet addr' | cut -d: -f2 | awk '{print $1}')
+  	ip=$(ssh -n $sshOptions $nodeIP ip addr show br0 | grep 'inet ' | cut -f2 | awk '{print $2}' | rev | cut -c4- | rev)
   	mac=$(ssh -n $sshOptions $nodeIP cat /sys/class/net/br0/address)
 	scp $sshOptions ./nifty_nodes.conf $nodeIP:"${NIFTY_HOME}/nifty_nodes.conf"
 	
