@@ -1,10 +1,11 @@
 The scripts in this folder are meant to facilitate the deployment of NIFTY and Partitioner on multiple machines.
 
-There are three scripts:
+There are four scripts:
 
 1. deploy_nifty: This script configures Nifty, and runs it on all the nodes specified in nodes.conf configuration file.
 2. deploy_partitioner: This script configures partitioner, and runs it on all the nodes specified in nodes.conf. The way the partition is set up (between which nodes) is configured in parts.conf config file.
 3. heal_partition: This script heals the partition that is currently present in the nodes in nodes.conf configuration file.
+4. stop_nifty: This script stops Nifty instances running on all the nodes specified in nodes.conf configuration file.
 
 
 Assumptions
@@ -48,18 +49,17 @@ Partitioner Deployment
 To use Partitioner, you need a config the parts.conf file which specifies the partition. 
 
 The structure of the config file is as follows:
-First line is an integer that represents the number of nodes in the first group (n). The next n lines list the MAC addresses of these nodes. Next line is an integer the represents the number of nodes in the second group (m). The next m lines list the MAC addresses of these nodes. e.g.,
+First line is an integer that represents the number of nodes in the first group (n). The next n lines list the IP addresses of these nodes. Next line is an integer the represents the number of nodes in the second group (m). The next m lines list the IP addresses of these nodes. e.g.,
 
 ```
 1
-08:00:27:39:87:e1
+192.168.1.101
 2
-08:00:27:39:87:e2
-08:00:27:39:87:e3
+192.168.1.102
+192.168.1.103
 ```
 
-The example parts.conf above specifies a partition in which MAC1 (08:00:27:39:87:e1) is on one side and the two nodes with macs (MAC2 = 08:00:27:39:87:e2 and MAC3 = 08:00:27:39:87:e3) are on another. Other nodes that are not listed in parts.conf are not affected by the partition, i.e., can access all other nodes. 
-To help you in configuring parts.conf, we include a helper script (detailed bellow) to discover the MAC addresses in a cluster.
+The example parts.conf above specifies a partition in which IP1 (192.168.1.101) is on one side and the two nodes with macs (IP2 = 192.168.1.102 and IP3 = 192.168.1.103) are on another. Other nodes that are not listed in parts.conf are not affected by the partition, i.e., can access all other nodes. 
 
 Once you configure parts.conf you can run the partitioner to create the partition.
 
@@ -76,8 +76,7 @@ To heal a partition, simple call the heal script
 Helper Scripts
 =======
 
-To configure parts.conf you need to know the MAC addresses of all the nodes in the cluster. We include a simple script to print out all the MAC addresses.
-
+If you intend on running Nifty or the partitioner manually, you will need to find the MAC addresses of nodes in the cluster. You can use the print_macs helper script to help.
 Run the helper script as follows:
 
 
